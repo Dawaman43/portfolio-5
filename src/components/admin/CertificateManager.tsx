@@ -4,6 +4,16 @@ import { useCallback, useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import type { ChangeEvent, FormEvent } from "react";
 
+function isImageUrl(url: string | null | undefined) {
+  if (!url) return false;
+  return /\.(png|jpe?g|gif|webp|svg)$/i.test(url);
+}
+
+function isPdfUrl(url: string | null | undefined) {
+  if (!url) return false;
+  return /\.pdf$/i.test(url);
+}
+
 type Certificate = {
   id: string;
   title: string;
@@ -156,9 +166,29 @@ function CertificateManager() {
           />
           {uploading && <p className="text-xs text-white/60">Uploading...</p>}
           {form.file_url && (
-            <p className="text-xs text-white/70 break-all">
-              Uploaded file: {form.file_url}
-            </p>
+            <div className="space-y-2">
+              <p className="text-xs text-white/70 break-all">
+                Uploaded file: {form.file_url}
+              </p>
+              {isImageUrl(form.file_url) ? (
+                <div className="rounded-lg border border-white/10 bg-black/20 overflow-hidden w-full max-w-sm">
+                  <img
+                    src={form.file_url}
+                    alt="Certificate preview"
+                    className="block w-full h-40 object-contain bg-black/30"
+                    loading="lazy"
+                  />
+                </div>
+              ) : isPdfUrl(form.file_url) ? (
+                <div className="rounded-lg border border-white/10 bg-black/20 overflow-hidden w-full max-w-sm h-48">
+                  <iframe
+                    src={form.file_url}
+                    title="Certificate document preview"
+                    className="w-full h-full"
+                  />
+                </div>
+              ) : null}
+            </div>
           )}
         </label>
         <div className="md:col-span-2 flex justify-end gap-3">
@@ -181,18 +211,38 @@ function CertificateManager() {
               key={certificate.id}
               className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 rounded-lg border border-white/10 bg-white/5 px-3 py-2"
             >
-              <div>
+              <div className="flex-1">
                 <p className="font-semibold text-white">{certificate.title}</p>
                 <p className="text-xs text-white/60">{certificate.issuer}</p>
                 {certificate.file_url && (
-                  <a
-                    className="text-xs text-white/70 underline"
-                    href={certificate.file_url}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    View file
-                  </a>
+                  <div className="mt-2 space-y-2">
+                    {isImageUrl(certificate.file_url) ? (
+                      <div className="rounded-lg border border-white/10 bg-black/20 overflow-hidden w-full max-w-xs">
+                        <img
+                          src={certificate.file_url}
+                          alt={certificate.title}
+                          className="block w-full h-32 object-contain bg-black/30"
+                          loading="lazy"
+                        />
+                      </div>
+                    ) : isPdfUrl(certificate.file_url) ? (
+                      <div className="rounded-lg border border-white/10 bg-black/20 overflow-hidden w-full max-w-xs h-36">
+                        <iframe
+                          src={certificate.file_url}
+                          title={`${certificate.title} document`}
+                          className="w-full h-full"
+                        />
+                      </div>
+                    ) : null}
+                    <a
+                      className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs text-white/90 hover:bg-white/15"
+                      href={certificate.file_url}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      View file <span aria-hidden>↗</span>
+                    </a>
+                  </div>
                 )}
               </div>
               <button

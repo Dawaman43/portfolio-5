@@ -11,6 +11,16 @@ type Certificate = {
 
 export const revalidate = 60;
 
+function isImageUrl(url: string | null | undefined) {
+  if (!url) return false;
+  return /\.(png|jpe?g|gif|webp|svg)$/i.test(url);
+}
+
+function isPdfUrl(url: string | null | undefined) {
+  if (!url) return false;
+  return /\.pdf$/i.test(url);
+}
+
 async function CertificatesPage() {
   const { data, error } = await supabase
     .from("certificates")
@@ -67,7 +77,25 @@ async function CertificatesPage() {
                   </p>
                 ) : null}
                 {certificate.file_url ? (
-                  <div className="mt-3">
+                  <div className="mt-4 space-y-3">
+                    {isImageUrl(certificate.file_url) ? (
+                      <div className="rounded-xl border border-white/10 bg-black/20 overflow-hidden w-full max-w-xl">
+                        <img
+                          src={certificate.file_url}
+                          alt={certificate.title}
+                          className="block w-full h-auto object-contain"
+                          loading="lazy"
+                        />
+                      </div>
+                    ) : isPdfUrl(certificate.file_url) ? (
+                      <div className="rounded-xl border border-white/10 bg-black/20 overflow-hidden w-full max-w-xl h-80">
+                        <iframe
+                          src={certificate.file_url}
+                          title={`${certificate.title} document`}
+                          className="w-full h-full"
+                        />
+                      </div>
+                    ) : null}
                     <a
                       href={certificate.file_url}
                       target="_blank"
