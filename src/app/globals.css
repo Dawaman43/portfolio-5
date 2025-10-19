@@ -1,3 +1,21 @@
+/* Elevate header by subtly blurring content beneath on hover */
+:root.header-hover body main {
+  filter: blur(2px) saturate(0.95);
+  transition: filter 150ms ease;
+}
+
+/* Top link navigation progress bar */
+.link-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  width: 0;
+  background: linear-gradient(90deg, #fff, rgba(255, 255, 255, 0.6));
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.6);
+  z-index: 60;
+  transition: width 0.2s ease;
+}
 @import "tailwindcss";
 
 :root {

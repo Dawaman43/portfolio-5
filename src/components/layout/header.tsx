@@ -18,13 +18,28 @@ const navLinks = [
 function Header() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [hovering, setHovering] = useState(false);
 
   useEffect(() => {
     setOpen(false);
   }, [pathname]);
 
+  // Blur the underlying content slightly when hovering header nav
+  useEffect(() => {
+    if (hovering) {
+      document.documentElement.classList.add("header-hover");
+    } else {
+      document.documentElement.classList.remove("header-hover");
+    }
+    return () => document.documentElement.classList.remove("header-hover");
+  }, [hovering]);
+
   return (
-    <header className="sticky top-0 z-50">
+    <header
+      className="sticky top-0 z-50"
+      onMouseEnter={() => setHovering(true)}
+      onMouseLeave={() => setHovering(false)}
+    >
       <div className="pt-[max(env(safe-area-inset-top),0.75rem)] px-4">
         <div className="mx-auto max-w-6xl">
           <nav
