@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import type { ChangeEvent, FormEvent } from "react";
@@ -213,11 +214,14 @@ function CertificateManager() {
               {/* Prefer temp preview while uploading, else show saved URL */}
               {tempPreviewUrl ? (
                 tempKind === "image" ? (
-                  <div className="rounded-lg border border-white/10 bg-black/20 overflow-hidden w-full max-w-sm">
-                    <img
+                  <div className="relative w-full max-w-sm aspect-[4/3] rounded-lg border border-white/10 bg-black/20 overflow-hidden">
+                    <Image
                       src={tempPreviewUrl}
                       alt="Certificate preview"
-                      className="block w-full h-40 object-contain bg-black/30"
+                      fill
+                      className="object-contain"
+                      sizes="(max-width: 768px) 100vw, 320px"
+                      unoptimized
                     />
                   </div>
                 ) : tempKind === "pdf" ? (
@@ -230,12 +234,14 @@ function CertificateManager() {
                   </div>
                 ) : null
               ) : isImageUrl(form.file_url) ? (
-                <div className="rounded-lg border border-white/10 bg-black/20 overflow-hidden w-full max-w-sm">
-                  <img
+                <div className="relative w-full max-w-sm aspect-[4/3] rounded-lg border border-white/10 bg-black/20 overflow-hidden">
+                  <Image
                     src={form.file_url as string}
                     alt="Certificate preview"
-                    className="block w-full h-40 object-contain bg-black/30"
-                    loading="lazy"
+                    fill
+                    className="object-contain"
+                    sizes="(max-width: 768px) 100vw, 320px"
+                    priority
                   />
                 </div>
               ) : isPdfUrl(form.file_url) ? (
@@ -276,12 +282,13 @@ function CertificateManager() {
                 {certificate.file_url && (
                   <div className="mt-2 space-y-2">
                     {isImageUrl(certificate.file_url) ? (
-                      <div className="rounded-lg border border-white/10 bg-black/20 overflow-hidden w-full max-w-xs">
-                        <img
+                      <div className="relative w-full max-w-xs aspect-[4/3] rounded-lg border border-white/10 bg-black/20 overflow-hidden">
+                        <Image
                           src={certificate.file_url}
                           alt={certificate.title}
-                          className="block w-full h-32 object-contain bg-black/30"
-                          loading="lazy"
+                          fill
+                          className="object-contain"
+                          sizes="(max-width: 768px) 100vw, 240px"
                         />
                       </div>
                     ) : isPdfUrl(certificate.file_url) ? (

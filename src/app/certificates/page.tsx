@@ -1,3 +1,4 @@
+import Image from "next/image";
 import supabase from "@/lib/supabase";
 
 type Certificate = {
@@ -36,11 +37,21 @@ function isPdfUrl(url: string | null | undefined) {
 }
 
 async function CertificatesPage() {
-  const { data, error } = await supabase
-    .from("certificates")
-    .select("id, title, issuer, year, file_url, description")
-    .order("created_at", { ascending: false });
-  const certificates = (data ?? []) as Certificate[];
+  let certificates: Certificate[] = [];
+  let fetchError: unknown = null;
+  try {
+    const res = await supabase
+      .from("certificates")
+      .select("id, title, issuer, year, file_url, description")
+      .order("created_at", { ascending: false });
+    if (res.error) {
+      fetchError = res.error;
+    } else {
+      certificates = (res.data ?? []) as Certificate[];
+    }
+  } catch (err) {
+    fetchError = err;
+  }
   return (
     <main className="px-4 md:px-6 py-16 md:py-24">
       <section className="max-w-5xl mx-auto space-y-10">
@@ -57,7 +68,7 @@ async function CertificatesPage() {
           </p>
         </header>
 
-        {error && (
+        {!!fetchError && (
           <p className="text-sm text-red-300">Failed to load certificates.</p>
         )}
         <div className="space-y-4">
@@ -93,12 +104,13 @@ async function CertificatesPage() {
                 {certificate.file_url ? (
                   <div className="mt-4 space-y-3">
                     {isImageUrl(certificate.file_url) ? (
-                      <div className="rounded-xl border border-white/10 bg-black/20 overflow-hidden w-full max-w-xl">
-                        <img
+                      <div className="relative w-full max-w-xl aspect-[4/3] rounded-xl border border-white/10 bg-black/20 overflow-hidden">
+                        <Image
                           src={certificate.file_url}
                           alt={certificate.title}
-                          className="block w-full h-auto object-contain"
-                          loading="lazy"
+                          fill
+                          className="object-contain"
+                          sizes="(max-width: 768px) 100vw, 640px"
                         />
                       </div>
                     ) : isPdfUrl(certificate.file_url) ? (

@@ -57,23 +57,6 @@ const projects = [
     href: "/projects/gebeya-go",
     stack: ["Next.js", "Turbopack", "Prisma", "PostgreSQL"],
   },
-  {
-    title: "AI Support Copilot",
-    description:
-      "Fine-tuned LLM assistant automating tier-one support with vector search, guardrails, and human handoff.",
-    impact: "Automates 45% of tickets and reduced median response time by 62%.",
-    href: "/projects/ai-support-copilot",
-    stack: ["Python", "LangChain", "OpenAI", "Redis"],
-  },
-  {
-    title: "Insight Pulse",
-    description:
-      "Cross-platform analytics tool powering custom dashboards with realtime collaboration and alerts.",
-    impact:
-      "Enabled product teams to ship twice as fast by centralizing instrumentation.",
-    href: "https://github.com/your/insight-pulse",
-    stack: ["Next.js", "tRPC", "Tailwind", "ClickHouse"],
-  },
 ];
 
 async function ProjectsPage() {
