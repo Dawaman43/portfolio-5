@@ -5,12 +5,7 @@
   --foreground: #171717;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+/* Removed Tailwind @theme inline for compatibility; using raw CSS variables instead. */
 
 @media (prefers-color-scheme: light) {
   :root {
@@ -23,4 +18,100 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* iPhone-like liquid glass capsule (for header bar) */
+.liquid-glass {
+  position: relative;
+  display: inline-flex; /* parent will apply sizing via utilities */
+  align-items: center;
+  border-radius: 9999px; /* full capsule */
+  border: 1px solid color-mix(in srgb, #fff 30%, transparent);
+  background: color-mix(in srgb, #ffffff 8%, transparent);
+  /* fallback for browsers without color-mix */
+  background-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25),
+    inset 0 0.5px 0 rgba(255, 255, 255, 0.35),
+    inset 0 -0.5px 0 rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  isolation: isolate;
+  overflow: hidden;
+}
+
+/* Liquid color wash moving softly behind */
+.liquid-glass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  display: none; /* gradient background removed */
+}
+
+/* Glossy top highlight and subtle border glow */
+.liquid-glass::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  display: none; /* glossy gradient removed */
+}
+
+@keyframes liquidShift {
+  0% {
+    transform: translate3d(-2%, 0, 0) rotate(0.001deg);
+    filter: blur(24px) saturate(110%);
+  }
+  25% {
+    transform: translate3d(2%, -1%, 0) rotate(0.001deg);
+  }
+  50% {
+    transform: translate3d(-1%, 1%, 0) rotate(0.001deg);
+  }
+  75% {
+    transform: translate3d(1%, 0, 0) rotate(0.001deg);
+  }
+  100% {
+    transform: translate3d(-2%, 0, 0) rotate(0.001deg);
+  }
+}
+
+/* Reduce motion: stop the liquid animation for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .liquid-glass::before {
+    animation: none;
+  }
+}
+
+/* Optional: subtle noise for texture */
+.liquid-noise {
+  position: relative;
+}
+.liquid-noise::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background-image: radial-gradient(
+    rgba(255, 255, 255, 0.05) 1px,
+    transparent 1px
+  );
+  background-size: 3px 3px;
+  mix-blend-mode: overlay;
+  opacity: 0.25;
+}
+
+/* Light and dark adjustments */
+@media (prefers-color-scheme: light) {
+  .liquid-glass {
+    border-color: rgba(0, 0, 0, 0.12);
+    background-color: rgba(255, 255, 255, 0.6);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15),
+      inset 0 0.5px 0 rgba(255, 255, 255, 0.7),
+      inset 0 -0.5px 0 rgba(255, 255, 255, 0.4);
+  }
+  .liquid-glass::before {
+    filter: blur(22px) saturate(100%);
+  }
 }
