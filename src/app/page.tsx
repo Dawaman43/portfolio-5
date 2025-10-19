@@ -4,6 +4,7 @@ import type { CSSProperties } from "react";
 import IntroOverlay from "@/components/ui/IntroOverlay";
 import TiltCard from "@/components/ui/TiltCard";
 import ScrollRail from "@/components/ui/ScrollRail";
+import HomeMotion from "@/components/home/HomeMotion";
 
 const focusHighlights = [
   {
@@ -56,22 +57,23 @@ const featuredProjects = [
 
 const experienceTimeline = [
   {
-    role: "Senior Full‑Stack Engineer",
-    company: "Gebeya",
+    role: "Software Engineering Student • 4th Year",
+    company: "Adama Science and Technology University",
     period: "2022 — Present",
     details: [
-      "Led cross-platform squad shipping web + Android features to 50k+ users.",
-      "Introduced design system + component library reducing UI defects by 38%.",
-      "Rolled out analytics pipeline for product-led insights.",
+      "Balancing a full course load while prototyping real-world products for the campus community.",
+      "Led a multidisciplinary capstone team delivering a data-driven student services platform.",
+      "Organized peer workshops mentoring 40+ developers on modern web and AI tooling.",
     ],
   },
   {
-    role: "Software Engineer",
-    company: "Freelance / Consulting",
-    period: "2019 — 2022",
+    role: "Freelance Product Engineer",
+    company: "Remote Collaborations",
+    period: "2020 — Present",
     details: [
-      "Delivered end-to-end products for startups across FinTech, EdTech, and Logistics.",
-      "Built AI prototypes leveraging NLP and computer vision for automation.",
+      "Ship MVPs for founders in hiring, logistics, and edtech with rapid iteration cycles.",
+      "Integrate AI-assisted features such as semantic search and support copilots across stacks.",
+      "Partner with designers and stakeholders to align product strategy with measurable impact.",
     ],
   },
 ];
@@ -135,6 +137,7 @@ function Home() {
     <main className="px-4 md:px-6 space-y-16 md:space-y-20">
       <IntroOverlay />
       <ScrollRail />
+      <HomeMotion />
       {/* Hero */}
       <section className="relative max-w-6xl mx-auto pt-16 md:pt-28 pb-16 md:pb-24">
         <div
@@ -148,16 +151,25 @@ function Home() {
         <div className="relative grid grid-cols-1 md:grid-cols-[1.1fr_0.9fr] items-center gap-8 md:gap-12">
           {/* Text */}
           <div className="text-center md:text-left overflow-visible">
-            <div className="inline-flex items-center px-4 py-1.5 rounded-full border border-white/15 bg-white/5 backdrop-blur-md fade-up">
+            <div
+              className="inline-flex items-center px-4 py-1.5 rounded-full border border-white/15 bg-white/5 backdrop-blur-md"
+              data-hero-item
+            >
               <span className="text-xs text-white/75">
                 Full‑Stack • Android • AI/ML
               </span>
             </div>
-            <h1 className="mt-6 text-4xl md:text-6xl font-extrabold tracking-tight fade-up fade-up-delay-1">
+            <h1
+              className="mt-6 text-4xl md:text-6xl font-extrabold tracking-tight"
+              data-hero-item
+            >
               Dawit Worku
             </h1>
             {/* Role ticker */}
-            <div className="mt-2 h-6 md:h-7 relative overflow-hidden fade-up fade-up-delay-2">
+            <div
+              className="mt-2 h-6 md:h-7 relative overflow-hidden"
+              data-hero-item
+            >
               <div className="absolute inset-0 [mask-image:linear-gradient(black,black)] animate-[ticker_9s_ease-in-out_infinite] will-change-transform">
                 <div className="flex flex-col gap-0 text-sm md:text-base text-white/80">
                   <span>Full‑Stack Developer</span>
@@ -166,12 +178,18 @@ function Home() {
                 </div>
               </div>
             </div>
-            <p className="mt-4 md:mt-6 text-base md:text-lg text-white/80 leading-relaxed max-w-2xl mx-auto md:mx-0 fade-up fade-up-delay-2">
+            <p
+              className="mt-4 md:mt-6 text-base md:text-lg text-white/80 leading-relaxed max-w-2xl mx-auto md:mx-0"
+              data-hero-item
+            >
               I design and build across web, Android, and AI/ML—shipping
               polished UIs, reliable APIs, and intelligent features with
               measurable impact.
             </p>
-            <div className="mt-8 flex items-center justify-center md:justify-start gap-3 md:gap-4 fade-up fade-up-delay-3">
+            <div
+              className="mt-8 flex items-center justify-center md:justify-start gap-3 md:gap-4"
+              data-hero-item
+            >
               <Link
                 href="/projects"
                 className="rounded-full px-5 md:px-6 py-2.5 md:py-3 bg-white text-black font-semibold shadow hover:bg-white/90 transition"
@@ -186,7 +204,10 @@ function Home() {
               </Link>
             </div>
             {/* Stats + Social */}
-            <div className="mt-6 md:mt-8 flex flex-col md:flex-row items-center md:items-start gap-4 md:gap-6 fade-up fade-up-delay-3">
+            <div
+              className="mt-6 md:mt-8 flex flex-col md:flex-row items-center md:items-start gap-4 md:gap-6"
+              data-hero-item
+            >
               <div className="flex flex-wrap justify-center md:justify-start gap-x-6 gap-y-3 text-white/80 text-sm md:text-base">
                 <div>
                   <span className="text-white font-bold">5+</span> yrs exp
@@ -253,7 +274,10 @@ function Home() {
               </div>
             </div>
 
-            <div className="mt-8 glass-panel px-5 py-4 md:px-6 md:py-5 text-left">
+            <div
+              className="mt-8 glass-panel px-5 py-4 md:px-6 md:py-5 text-left"
+              data-hero-item
+            >
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 {heroFacts.map((fact) => (
                   <div
@@ -271,7 +295,10 @@ function Home() {
           </div>
 
           {/* Photo */}
-          <div className="flex justify-center md:justify-end overflow-visible">
+          <div
+            className="flex justify-center md:justify-end overflow-visible"
+            data-hero-media
+          >
             <div className="relative w-48 h-48 md:w-64 md:h-64 lg:w-72 lg:h-72 rounded-3xl overflow-hidden glass-panel float-slow">
               <Image
                 src="/profile.jpg"
@@ -294,6 +321,7 @@ function Home() {
                   key={badge.label}
                   className={`hero-badge hidden md:inline-flex float-slow ${badge.delayClass}`}
                   style={badge.style}
+                  data-hero-badge
                 >
                   {badge.label}
                 </span>
@@ -304,7 +332,7 @@ function Home() {
       </section>
 
       {/* Focus */}
-      <section className="max-w-6xl mx-auto pb-16 md:pb-20">
+      <section className="max-w-6xl mx-auto pb-16 md:pb-20" data-section-reveal>
         <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between mb-6">
           <h2 className="text-2xl md:text-3xl font-extrabold">
             What I focus on
@@ -318,6 +346,7 @@ function Home() {
             <TiltCard
               key={item.title}
               className="group glass-panel p-6 md:p-7 transition-transform duration-300 hover:-translate-y-1 will-change-transform"
+              data-reveal-child
             >
               <div className="w-10 h-10 mb-4 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-white/80">
                 <span className="text-lg">•</span>
@@ -340,7 +369,11 @@ function Home() {
       </section>
 
       {/* Projects */}
-      <section id="projects" className="max-w-6xl mx-auto pb-16 md:pb-20">
+      <section
+        id="projects"
+        className="max-w-6xl mx-auto pb-16 md:pb-20"
+        data-section-reveal
+      >
         <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between mb-6">
           <h2 className="text-2xl md:text-3xl font-extrabold">Featured work</h2>
           <Link
@@ -355,6 +388,7 @@ function Home() {
             <TiltCard
               key={project.title}
               className="glass-panel p-6 flex flex-col justify-between will-change-transform"
+              data-reveal-child
             >
               <div>
                 <h3 className="text-xl font-semibold text-white">
@@ -387,13 +421,21 @@ function Home() {
       </section>
 
       {/* Experience */}
-      <section id="experience" className="max-w-6xl mx-auto pb-16 md:pb-20">
+      <section
+        id="experience"
+        className="max-w-6xl mx-auto pb-16 md:pb-20"
+        data-section-reveal
+      >
         <h2 className="text-2xl md:text-3xl font-extrabold mb-6">
           Experience & Impact
         </h2>
         <div className="space-y-6 border-l border-white/15 pl-6">
           {experienceTimeline.map((item) => (
-            <article key={`${item.role}-${item.company}`} className="relative">
+            <article
+              key={`${item.role}-${item.company}`}
+              className="relative"
+              data-reveal-child
+            >
               <span className="absolute -left-8 top-1.5 h-3 w-3 rounded-full bg-white" />
               <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
                 <div>
@@ -422,9 +464,9 @@ function Home() {
       </section>
 
       {/* Tools & Learning */}
-      <section className="max-w-6xl mx-auto pb-16 md:pb-20">
+      <section className="max-w-6xl mx-auto pb-16 md:pb-20" data-section-reveal>
         <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_0.8fr] gap-6 md:gap-8">
-          <div className="glass-panel p-6">
+          <div className="glass-panel p-6" data-reveal-child>
             <h2 className="text-xl md:text-2xl font-semibold">Daily toolkit</h2>
             <p className="mt-2 text-sm md:text-base text-white/75">
               Technologies I use every day to keep products shipping quickly and
@@ -442,7 +484,7 @@ function Home() {
             </ul>
           </div>
 
-          <div className="glass-panel p-6">
+          <div className="glass-panel p-6" data-reveal-child>
             <h2 className="text-xl md:text-2xl font-semibold">
               Currently exploring
             </h2>
@@ -463,8 +505,15 @@ function Home() {
       </section>
 
       {/* Contact CTA */}
-      <section id="contact" className="max-w-5xl mx-auto pb-20">
-        <div className="glass-panel p-6 md:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <section
+        id="contact"
+        className="max-w-5xl mx-auto pb-20"
+        data-section-reveal
+      >
+        <div
+          className="glass-panel p-6 md:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-4"
+          data-reveal-child
+        >
           <div>
             <h2 className="text-xl md:text-2xl font-extrabold">
               Let’s build what’s next

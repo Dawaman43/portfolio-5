@@ -27,6 +27,14 @@
   --accent: rgba(99, 102, 241, 0.4);
 }
 
+.text-foreground {
+  color: var(--foreground);
+}
+
+.text-muted-foreground {
+  color: var(--muted-foreground);
+}
+
 /* Use lighter palette when system prefers light mode */
 @media (prefers-color-scheme: light) {
   :root {
@@ -36,6 +44,80 @@
     --foreground: #0f172a;
     --muted-foreground: rgba(30, 41, 59, 0.68);
     --accent: rgba(37, 99, 235, 0.3);
+  }
+
+  .glass-panel {
+    background: rgba(255, 255, 255, 0.82);
+    border-color: rgba(15, 23, 42, 0.08);
+    box-shadow: 0 12px 35px rgba(15, 23, 42, 0.12),
+      inset 0 1px 0 rgba(255, 255, 255, 0.65),
+      inset 0 -1px 0 rgba(15, 23, 42, 0.05);
+    backdrop-filter: blur(10px) saturate(110%);
+    -webkit-backdrop-filter: blur(10px) saturate(110%);
+  }
+
+  .text-white {
+    color: #0f172a !important;
+  }
+
+  .text-white\/95 {
+    color: rgba(15, 23, 42, 0.95) !important;
+  }
+
+  .text-white\/90 {
+    color: rgba(15, 23, 42, 0.9) !important;
+  }
+
+  .text-white\/85 {
+    color: rgba(15, 23, 42, 0.85) !important;
+  }
+
+  .text-white\/80 {
+    color: rgba(15, 23, 42, 0.8) !important;
+  }
+
+  .text-white\/75 {
+    color: rgba(15, 23, 42, 0.75) !important;
+  }
+
+  .text-white\/70 {
+    color: rgba(15, 23, 42, 0.7) !important;
+  }
+
+  .text-white\/60 {
+    color: rgba(15, 23, 42, 0.6) !important;
+  }
+
+  .text-white\/50 {
+    color: rgba(15, 23, 42, 0.5) !important;
+  }
+
+  .text-white\/40 {
+    color: rgba(15, 23, 42, 0.4) !important;
+  }
+
+  .border-white\/20 {
+    border-color: rgba(15, 23, 42, 0.14) !important;
+  }
+
+  .border-white\/15 {
+    border-color: rgba(15, 23, 42, 0.12) !important;
+  }
+
+  .border-white\/10 {
+    border-color: rgba(15, 23, 42, 0.08) !important;
+  }
+
+  .bg-white\/10 {
+    background-color: rgba(15, 23, 42, 0.06) !important;
+  }
+
+  .bg-white\/5 {
+    background-color: rgba(15, 23, 42, 0.04) !important;
+  }
+
+  .placeholder\:text-white\/50::placeholder {
+    color: rgba(15, 23, 42, 0.45) !important;
   }
 }
 

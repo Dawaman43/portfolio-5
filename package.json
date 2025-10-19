@@ -13,6 +13,7 @@
     "isomorphic-dompurify": "^2.29.0",
     "jsdom": "^27.0.1",
     "highlight.js": "^11.10.0",
+    "gsap": "^3.12.5",
     "marked": "^16.4.1",
     "next": "15.5.6",
     "react": "19.1.0",
