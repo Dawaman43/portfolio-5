@@ -53,5 +53,19 @@ export const iphoneSystem = {
     '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
 };
 
-// Helper: combined body class for convenience
-export const bodyFontClass = `${geistSans.variable} ${geistMono.variable}`;
+// Helper: combined body class for convenience (expose variables on <body>)
+export const bodyFontClass = [
+  geistSans.variable,
+  geistMono.variable,
+  inter.variable,
+  playfair.variable,
+  poppins.variable,
+  robotoSlab.variable,
+  oswald.variable,
+]
+  .filter(Boolean)
+  .join(" ");
+
+// Optional: export heading & body class names if needed elsewhere
+export const headingClass = playfair.variable;
+export const bodySansClass = inter.variable;

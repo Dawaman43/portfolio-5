@@ -1,0 +1,2 @@
+1. Implement Supabase client and data fetching for blogs.
+2. Create admin dashboard with CRUD for blogs, certificates, skills, etc.

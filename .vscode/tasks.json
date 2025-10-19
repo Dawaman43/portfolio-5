@@ -14,6 +14,46 @@
 				"$tsc"
 			],
 			"group": "build"
+		},
+		{
+			"label": "Dev server (Next.js)",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"run",
+				"dev"
+			],
+			"isBackground": true,
+			"problemMatcher": [
+				"$tsc"
+			],
+			"group": "build"
+		},
+		{
+			"label": "placeholder",
+			"type": "shell",
+			"command": "echo todo",
+			"isBackground": false
+		},
+		{
+			"label": "noop",
+			"type": "shell",
+			"command": "echo noop",
+			"isBackground": false
+		},
+		{
+			"label": "lint:check",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"run",
+				"lint"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$eslint-stylish"
+			],
+			"group": "build"
 		}
 	]
 }
