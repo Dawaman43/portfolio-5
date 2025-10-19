@@ -13,12 +13,26 @@ export const revalidate = 60;
 
 function isImageUrl(url: string | null | undefined) {
   if (!url) return false;
-  return /\.(png|jpe?g|gif|webp|svg)$/i.test(url);
+  try {
+    const u = new URL(url);
+    const path = u.pathname.toLowerCase();
+    return /\.(png|jpe?g|gif|webp|svg)$/i.test(path);
+  } catch {
+    const path = url.split("?")[0].toLowerCase();
+    return /\.(png|jpe?g|gif|webp|svg)$/i.test(path);
+  }
 }
 
 function isPdfUrl(url: string | null | undefined) {
   if (!url) return false;
-  return /\.pdf$/i.test(url);
+  try {
+    const u = new URL(url);
+    const path = u.pathname.toLowerCase();
+    return /\.pdf$/i.test(path);
+  } catch {
+    const path = url.split("?")[0].toLowerCase();
+    return /\.pdf$/i.test(path);
+  }
 }
 
 async function CertificatesPage() {

@@ -6,12 +6,26 @@ import type { ChangeEvent, FormEvent } from "react";
 
 function isImageUrl(url: string | null | undefined) {
   if (!url) return false;
-  return /\.(png|jpe?g|gif|webp|svg)$/i.test(url);
+  try {
+    const u = new URL(url);
+    const path = u.pathname.toLowerCase();
+    return /\.(png|jpe?g|gif|webp|svg)$/i.test(path);
+  } catch {
+    const path = url.split("?")[0].toLowerCase();
+    return /\.(png|jpe?g|gif|webp|svg)$/i.test(path);
+  }
 }
 
 function isPdfUrl(url: string | null | undefined) {
   if (!url) return false;
-  return /\.pdf$/i.test(url);
+  try {
+    const u = new URL(url);
+    const path = u.pathname.toLowerCase();
+    return /\.pdf$/i.test(path);
+  } catch {
+    const path = url.split("?")[0].toLowerCase();
+    return /\.pdf$/i.test(path);
+  }
 }
 
 type Certificate = {
@@ -37,6 +51,8 @@ function CertificateManager() {
   const [form, setForm] = useState(emptyCertificate);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [tempPreviewUrl, setTempPreviewUrl] = useState<string | null>(null);
+  const [tempKind, setTempKind] = useState<"image" | "pdf" | null>(null);
 
   const fetchCertificates = useCallback(async () => {
     setError(null);
@@ -58,22 +74,44 @@ function CertificateManager() {
   const handleFileUpload = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
+    // Show immediate local preview while uploading
+    const objectUrl = URL.createObjectURL(file);
+    if (file.type.startsWith("image/")) {
+      setTempKind("image");
+      setTempPreviewUrl(objectUrl);
+    } else if (file.type === "application/pdf") {
+      setTempKind("pdf");
+      setTempPreviewUrl(objectUrl);
+    } else {
+      setTempKind(null);
+      setTempPreviewUrl(null);
+      URL.revokeObjectURL(objectUrl);
+    }
     setUploading(true);
     setError(null);
     const path = `certificates/${Date.now()}-${file.name}`;
+    const STORAGE_BUCKET =
+      process.env.NEXT_PUBLIC_SUPABASE_CERT_BUCKET || "certificates";
     const { error: storageError } = await supabase.storage
-      .from("media")
+      .from(STORAGE_BUCKET)
       .upload(path, file, {
         cacheControl: "3600",
         upsert: true,
+        contentType: file.type || undefined,
       });
     if (storageError) {
       setError(storageError.message);
     } else {
-      const { data } = supabase.storage.from("media").getPublicUrl(path);
+      const { data } = supabase.storage.from(STORAGE_BUCKET).getPublicUrl(path);
       setForm((prev) => ({ ...prev, file_url: data?.publicUrl ?? path }));
     }
     setUploading(false);
+    // Clean up local preview once we have a permanent URL
+    if (tempPreviewUrl && tempPreviewUrl.startsWith("blob:")) {
+      URL.revokeObjectURL(tempPreviewUrl);
+    }
+    setTempPreviewUrl(null);
+    setTempKind(null);
   };
 
   const handleSubmit = async (event: FormEvent) => {
@@ -165,15 +203,36 @@ function CertificateManager() {
             className="text-white/80"
           />
           {uploading && <p className="text-xs text-white/60">Uploading...</p>}
-          {form.file_url && (
+          {(tempPreviewUrl || form.file_url) && (
             <div className="space-y-2">
-              <p className="text-xs text-white/70 break-all">
-                Uploaded file: {form.file_url}
-              </p>
-              {isImageUrl(form.file_url) ? (
+              {form.file_url && (
+                <p className="text-xs text-white/70 break-all">
+                  Uploaded file: {form.file_url}
+                </p>
+              )}
+              {/* Prefer temp preview while uploading, else show saved URL */}
+              {tempPreviewUrl ? (
+                tempKind === "image" ? (
+                  <div className="rounded-lg border border-white/10 bg-black/20 overflow-hidden w-full max-w-sm">
+                    <img
+                      src={tempPreviewUrl}
+                      alt="Certificate preview"
+                      className="block w-full h-40 object-contain bg-black/30"
+                    />
+                  </div>
+                ) : tempKind === "pdf" ? (
+                  <div className="rounded-lg border border-white/10 bg-black/20 overflow-hidden w-full max-w-sm h-48">
+                    <iframe
+                      src={tempPreviewUrl}
+                      title="Certificate document preview"
+                      className="w-full h-full"
+                    />
+                  </div>
+                ) : null
+              ) : isImageUrl(form.file_url) ? (
                 <div className="rounded-lg border border-white/10 bg-black/20 overflow-hidden w-full max-w-sm">
                   <img
-                    src={form.file_url}
+                    src={form.file_url as string}
                     alt="Certificate preview"
                     className="block w-full h-40 object-contain bg-black/30"
                     loading="lazy"
@@ -182,7 +241,7 @@ function CertificateManager() {
               ) : isPdfUrl(form.file_url) ? (
                 <div className="rounded-lg border border-white/10 bg-black/20 overflow-hidden w-full max-w-sm h-48">
                   <iframe
-                    src={form.file_url}
+                    src={form.file_url as string}
                     title="Certificate document preview"
                     className="w-full h-full"
                   />
