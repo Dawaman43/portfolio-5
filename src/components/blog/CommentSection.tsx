@@ -242,11 +242,11 @@ function CommentSection({ slug, initialCount = 0 }: CommentSectionProps) {
             id={`comment-${comment.id}`}
             className="glass-panel p-4 space-y-3"
           >
-            <div className="flex items-center justify-between gap-3 text-xs uppercase tracking-widest text-white/60">
+            <div className="flex items-center justify-between gap-3 text-xs uppercase tracking-widest text-white/60 blog-comment__meta">
               <span>{comment.name ?? "Anonymous"}</span>
               <span>{formatDate(comment.created_at)}</span>
             </div>
-            <p className="text-sm leading-relaxed text-white/80 whitespace-pre-line">
+            <p className="text-sm leading-relaxed text-white/80 whitespace-pre-line blog-comment__text">
               {comment.message}
             </p>
             <div className="flex flex-wrap items-center gap-3 text-xs uppercase tracking-[0.3em] text-white/60">
@@ -254,21 +254,21 @@ function CommentSection({ slug, initialCount = 0 }: CommentSectionProps) {
                 type="button"
                 onClick={() => handleLike(comment.id, comment.likes ?? 0)}
                 disabled={likeBusy === comment.id}
-                className="flex items-center gap-1 rounded-full border border-white/15 bg-white/10 px-2.5 py-1 font-semibold text-white/70 hover:bg-white/15 disabled:opacity-60"
+                className="flex items-center gap-1 rounded-full border border-white/15 bg-white/10 px-2.5 py-1 font-semibold text-white/70 hover:bg-white/15 disabled:opacity-60 blog-comment__chip"
               >
                 ❤️ <span>{comment.likes ?? 0}</span>
               </button>
               <button
                 type="button"
                 onClick={() => handleShare(comment.id)}
-                className="rounded-full border border-white/15 bg-white/10 px-2.5 py-1 font-semibold text-white/70 hover:bg-white/15"
+                className="rounded-full border border-white/15 bg-white/10 px-2.5 py-1 font-semibold text-white/70 hover:bg-white/15 blog-comment__chip"
               >
                 Share
               </button>
               <button
                 type="button"
                 onClick={() => toggleReply(comment.id)}
-                className="text-xs font-semibold uppercase tracking-[0.3em] text-white/70 hover:text-white transition"
+                className="text-xs font-semibold uppercase tracking-[0.3em] text-white/70 hover:text-white transition blog-comment__link"
               >
                 Reply
               </button>
@@ -283,7 +283,7 @@ function CommentSection({ slug, initialCount = 0 }: CommentSectionProps) {
                 onSubmit={(event) => handleReplySubmit(event, comment.id)}
                 className="mt-3 space-y-3 rounded-xl border border-white/15 bg-white/5 p-3"
               >
-                <div className="grid grid-cols-1 gap-3 text-xs">
+                <div className="grid grid-cols-1 gap-3 text-xs blog-reply__form">
                   <label className="flex flex-col gap-2">
                     <span>Name</span>
                     <input
@@ -294,7 +294,7 @@ function CommentSection({ slug, initialCount = 0 }: CommentSectionProps) {
                           name: event.target.value,
                         }))
                       }
-                      className="rounded-lg border border-white/20 bg-white/5 px-3 py-2 text-white"
+                      className="rounded-lg border border-white/20 bg-white/5 px-3 py-2 text-white blog-reply__input"
                       placeholder="Your name (optional)"
                       maxLength={60}
                     />
@@ -311,7 +311,7 @@ function CommentSection({ slug, initialCount = 0 }: CommentSectionProps) {
                         }))
                       }
                       rows={3}
-                      className="rounded-lg border border-white/20 bg-white/5 px-3 py-2 text-white"
+                      className="rounded-lg border border-white/20 bg-white/5 px-3 py-2 text-white blog-reply__input"
                       placeholder="Write your reply"
                       maxLength={600}
                     />
@@ -352,14 +352,16 @@ function CommentSection({ slug, initialCount = 0 }: CommentSectionProps) {
 
   return (
     <section className="space-y-6">
-      <header className="space-y-1">
+      <header className="space-y-1 blog-comments__header">
         <div className="flex flex-wrap items-center gap-3">
-          <h2 className="text-xl font-semibold text-white">Comments</h2>
-          <span className="rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs uppercase tracking-[0.3em] text-white/70">
+          <h2 className="text-xl font-semibold text-white blog-comments__title">
+            Comments
+          </h2>
+          <span className="rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs uppercase tracking-[0.3em] text-white/70 blog-comments__badge">
             {commentLabel}
           </span>
         </div>
-        <p className="text-sm text-white/70">
+        <p className="text-sm text-white/70 blog-comments__subtitle">
           Join the discussion. Comments are public and appear immediately.
         </p>
       </header>
@@ -411,7 +413,7 @@ function CommentSection({ slug, initialCount = 0 }: CommentSectionProps) {
 
       <div className="space-y-3">
         {commentCount === 0 ? (
-          <p className="text-sm text-white/60">
+          <p className="text-sm text-white/60 blog-comments__empty">
             Be the first to leave a comment.
           </p>
         ) : (

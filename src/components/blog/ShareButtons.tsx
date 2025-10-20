@@ -44,7 +44,7 @@ function ShareButtons({ title, url }: ShareButtonsProps) {
       <button
         type="button"
         onClick={handleNativeShare}
-        className="rounded-full border border-white/20 bg-white/10 px-4 py-2 text-white/80 hover:bg-white/15"
+        className="share-btn rounded-full border border-white/20 bg-white/10 px-4 py-2 text-white/80 hover:bg-white/15"
       >
         Share post
       </button>
@@ -52,7 +52,7 @@ function ShareButtons({ title, url }: ShareButtonsProps) {
         href={links.twitter}
         target="_blank"
         rel="noreferrer"
-        className="rounded-full border border-white/20 bg-white/10 px-4 py-2 text-white/80 hover:bg-white/15"
+        className="share-btn rounded-full border border-white/20 bg-white/10 px-4 py-2 text-white/80 hover:bg-white/15"
       >
         Tweet
       </a>
@@ -60,14 +60,14 @@ function ShareButtons({ title, url }: ShareButtonsProps) {
         href={links.linkedin}
         target="_blank"
         rel="noreferrer"
-        className="rounded-full border border-white/20 bg-white/10 px-4 py-2 text-white/80 hover:bg-white/15"
+        className="share-btn rounded-full border border-white/20 bg-white/10 px-4 py-2 text-white/80 hover:bg-white/15"
       >
         Share on LinkedIn
       </a>
       <button
         type="button"
         onClick={handleCopy}
-        className="rounded-full border border-white/20 bg-white/10 px-4 py-2 text-white/80 hover:bg-white/15"
+        className="share-btn rounded-full border border-white/20 bg-white/10 px-4 py-2 text-white/80 hover:bg-white/15"
       >
         {copied ? "Copied!" : "Copy link"}
       </button>

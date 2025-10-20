@@ -46,7 +46,7 @@ function Header() {
             aria-label="Primary"
             className="transition-[transform,opacity] duration-300 ease-out will-change-transform"
           >
-            <div className="liquid-glass liquid-noise shadow-[0_8px_40px_rgba(0,0,0,0.25)] w-full md:w-auto px-4 md:px-6 py-3 md:py-3.5 flex items-center justify-between gap-4 md:gap-6">
+            <div className="liquid-glass liquid-noise mobile-nav-shell shadow-[0_8px_40px_rgba(0,0,0,0.25)] w-full md:w-auto px-4 md:px-6 py-3 md:py-3.5 flex items-center justify-between gap-4 md:gap-6">
               <Link
                 href="/"
                 className={`${inter.className} text-base md:text-lg font-semibold tracking-tight text-white flex items-center gap-2`}
@@ -121,7 +121,7 @@ function Header() {
             </div>
             {open && (
               <div className="md:hidden mt-3 animate-[fadeUp_0.2s_ease-out]">
-                <ul className="glass-panel px-5 py-4 space-y-2 text-left">
+                <ul className="glass-panel mobile-nav-menu px-5 py-4 space-y-2 text-left">
                   {navLinks.map((link) => {
                     const isActive =
                       pathname === link.href ||
@@ -130,12 +130,8 @@ function Header() {
                       <li key={link.name}>
                         <Link
                           href={link.href}
-                          className={`${
-                            inter.className
-                          } block rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
-                            isActive
-                              ? "bg-white text-black"
-                              : "text-white/85 hover:bg-white/10"
+                          className={`${inter.className} mobile-nav-link ${
+                            isActive ? "mobile-nav-link--active" : ""
                           }`}
                         >
                           {link.name}

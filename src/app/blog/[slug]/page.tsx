@@ -227,8 +227,9 @@ async function BlogPostPage({ params }: BlogPostPageProps) {
   }
 
   return (
-    <main className="px-4 md:px-6 py-16 md:py-24">
-      <article className="max-w-3xl mx-auto space-y-10">
+    <main className="blog-article-page px-4 md:px-6 py-16 md:py-24">
+      <div className="blog-article-page__backdrop" aria-hidden />
+      <article className="blog-article w-full mx-auto">
         <script
           type="application/ld+json"
           suppressHydrationWarning
@@ -237,30 +238,32 @@ async function BlogPostPage({ params }: BlogPostPageProps) {
           }}
         />
         <CodeBlockEnhancer />
-        <header className="space-y-5">
-          <div className="flex flex-wrap items-center gap-3 text-xs uppercase tracking-[0.3em] text-white/60">
-            <span>Published {formatDate(post.created_at)}</span>
-            {readingTime ? <span>• {readingTime} min read</span> : null}
+        <header className="blog-article__header">
+          <div className="blog-article__meta">
+            <span className="blog-article__meta-item">
+              Published {formatDate(post.created_at)}
+            </span>
+            {readingTime ? (
+              <span className="blog-article__meta-item">
+                • {readingTime} min read
+              </span>
+            ) : null}
           </div>
-          <h1 className="text-3xl md:text-4xl font-extrabold text-white">
-            {post.title}
-          </h1>
+          <h1 className="blog-article__title">{post.title}</h1>
           {post.excerpt && (
-            <p className="text-white/75 text-base md:text-lg leading-relaxed">
-              {post.excerpt}
-            </p>
+            <p className="blog-article__excerpt">{post.excerpt}</p>
           )}
-          <div className="pt-1">
+          <div className="blog-article__share">
             <ShareButtons title={post.title} url={canonicalUrl} />
           </div>
           {post.cover_image && (
-            <div className="blog-cover">
+            <div className="blog-article__cover blog-cover">
               <Image
                 src={post.cover_image}
                 alt={post.title}
                 width={960}
                 height={540}
-                className="h-auto w-full object-cover"
+                className="blog-article__cover-image"
                 priority
               />
               <div className="blog-cover__scrim" />
@@ -268,18 +271,22 @@ async function BlogPostPage({ params }: BlogPostPageProps) {
           )}
         </header>
 
-        <div className="h-px bg-white/10" />
+        <div className="blog-article__divider" />
 
         {hasContent ? (
-          <div
-            className="markdown-body"
-            dangerouslySetInnerHTML={{ __html: markdownHtml ?? "" }}
-          />
+          <section className="blog-article__body">
+            <div
+              className="markdown-body"
+              dangerouslySetInnerHTML={{ __html: markdownHtml ?? "" }}
+            />
+          </section>
         ) : (
-          <p className="text-white/60">This post has no content yet.</p>
+          <p className="blog-article__empty">This post has no content yet.</p>
         )}
 
-        <CommentSection slug={post.slug} initialCount={commentCount} />
+        <section className="blog-article__comments">
+          <CommentSection slug={post.slug} initialCount={commentCount} />
+        </section>
       </article>
     </main>
   );

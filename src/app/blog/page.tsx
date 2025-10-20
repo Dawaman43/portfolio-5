@@ -104,16 +104,13 @@ async function BlogPage({ searchParams }: BlogPageProps) {
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
 
   return (
-    <main className="px-4 md:px-6 py-16 md:py-24">
-      <section className="max-w-5xl mx-auto space-y-8">
-        <header className="space-y-3 text-center md:text-left">
-          <span className="inline-flex items-center rounded-full border border-white/20 bg-white/10 px-4 py-1 text-xs uppercase tracking-[0.3em] text-white/70">
-            Blog
-          </span>
-          <h1 className="text-3xl md:text-4xl font-extrabold">
-            Thinking in public
-          </h1>
-          <p className="text-sm md:text-base text-white/75 md:max-w-3xl">
+    <main className="blog-page px-4 md:px-6 py-16 md:py-24">
+      <div className="blog-page__backdrop" aria-hidden />
+      <section className="blog-page__container max-w-5xl mx-auto space-y-10">
+        <header className="blog-hero text-center md:text-left">
+          <span className="blog-hero__tag">Blog</span>
+          <h1 className="blog-hero__title">Thinking in public</h1>
+          <p className="blog-hero__subtitle md:max-w-3xl">
             Ideas, notes, and lessons learned from building products across the
             web, Android, and AI/ML.
           </p>
@@ -126,42 +123,38 @@ async function BlogPage({ searchParams }: BlogPageProps) {
         )}
 
         {/* Search and controls */}
-        <form
-          action="/blog"
-          method="get"
-          className="glass-panel p-4 md:p-5 flex flex-col md:flex-row md:items-end gap-3"
-        >
-          <label className="flex-1 flex flex-col gap-1 text-sm">
-            <span className="text-white/70">Search</span>
+        <form action="/blog" method="get" className="blog-search">
+          <label className="blog-search__field">
+            <span className="blog-search__label">Search</span>
             <input
               name="q"
               defaultValue={q}
               placeholder="Search articles by title or excerpt..."
-              className="rounded-lg border border-white/20 bg-white/5 px-3 py-2 text-white placeholder-white/40"
+              className="blog-search__input"
             />
           </label>
-          <label className="flex flex-col gap-1 text-sm">
-            <span className="text-white/70">Sort</span>
+          <label className="blog-search__field blog-search__field--compact">
+            <span className="blog-search__label">Sort</span>
             <select
               name="sort"
               defaultValue={sort}
-              className="rounded-lg border border-white/20 bg-white/5 px-3 py-2 text-white"
+              className="blog-search__select"
             >
               <option value="new">Newest</option>
               <option value="old">Oldest</option>
             </select>
           </label>
-          <div className="flex items-center gap-2">
+          <div className="blog-search__actions">
             <button
               type="submit"
-              className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-[#020617] hover:bg-white/90"
+              className="blog-search__action blog-search__action--primary"
             >
               Apply
             </button>
             {q || sort !== "new" ? (
               <Link
                 href="/blog"
-                className="rounded-full border border-white/20 px-4 py-2 text-sm text-white/80 hover:bg-white/10"
+                className="blog-search__action blog-search__action--secondary"
               >
                 Reset
               </Link>
@@ -171,12 +164,12 @@ async function BlogPage({ searchParams }: BlogPageProps) {
 
         <div className="space-y-5">
           {(q || sort !== "new") && (
-            <div className="text-xs md:text-sm text-white/70">
+            <div className="blog-meta text-xs md:text-sm">
               Showing {posts.length} of {total} result{total === 1 ? "" : "s"}
               {q ? (
                 <>
                   {" "}
-                  for <span className="text-white">“{q}”</span>
+                  for <span className="blog-meta__em">“{q}”</span>
                 </>
               ) : null}
               {sort === "old" ? " • Oldest first" : " • Newest first"}
@@ -184,7 +177,7 @@ async function BlogPage({ searchParams }: BlogPageProps) {
             </div>
           )}
           {posts.length === 0 && !error && (
-            <div className="glass-panel p-6 md:p-7 text-center text-sm text-white/70">
+            <div className="blog-empty">
               {q ? (
                 <>No results found for “{q}”. Try a different search.</>
               ) : (
@@ -195,13 +188,14 @@ async function BlogPage({ searchParams }: BlogPageProps) {
               )}
             </div>
           )}
-          {posts.map((post) => (
+          {posts.map((post, index) => (
             <Link
               key={post.id}
               href={`/blog/${encodeURIComponent(post.slug)}`}
-              className="group block"
+              className="group block blog-card-wrap"
+              style={{ animationDelay: `${index * 70}ms` }}
             >
-              <article className="blog-card rounded-2xl border border-white/10 p-6 md:p-7 transition duration-300 ease-out hover:-translate-y-1 hover:border-white/20">
+              <article className="blog-card">
                 {post.cover_image ? (
                   <div
                     className="blog-card__media"
@@ -211,27 +205,22 @@ async function BlogPage({ searchParams }: BlogPageProps) {
                   />
                 ) : null}
                 <div className="blog-card__overlay" />
-                <div className="blog-card__content space-y-4">
-                  <div className="flex flex-wrap items-center gap-3 text-xs uppercase tracking-[0.3em] text-white/60">
-                    <span>{formatDate(post.created_at)}</span>
+                <div className="blog-card__content">
+                  <div className="blog-card__meta">
+                    <span className="blog-card__date">
+                      {formatDate(post.created_at)}
+                    </span>
                     {isNewPost(post.created_at) ? (
-                      <span className="rounded-full border border-white/30 bg-white/15 px-3 py-1 text-[0.65rem] font-semibold tracking-[0.2em] text-white">
-                        New
-                      </span>
+                      <span className="blog-card__badge">New</span>
                     ) : null}
                   </div>
-                  <h2 className="text-xl md:text-2xl font-semibold text-white">
-                    {post.title}
-                  </h2>
-                  <p className="text-sm md:text-base text-white/80 leading-relaxed max-w-2xl">
+                  <h2 className="blog-card__title">{post.title}</h2>
+                  <p className="blog-card__excerpt">
                     {post.excerpt ?? "Tap to read the full story."}
                   </p>
-                  <div className="flex items-center gap-3 text-sm font-semibold text-white/80 group-hover:text-white">
+                  <div className="blog-card__cta">
                     <span>Read article</span>
-                    <span
-                      aria-hidden
-                      className="transition-transform group-hover:translate-x-1"
-                    >
+                    <span aria-hidden className="blog-card__cta-icon">
                       →
                     </span>
                   </div>
@@ -241,7 +230,7 @@ async function BlogPage({ searchParams }: BlogPageProps) {
           ))}
           {/* Pagination */}
           {totalPages > 1 && (
-            <div className="flex items-center justify-between pt-2">
+            <div className="blog-pagination">
               {page > 1 ? (
                 <Link
                   href={`/blog?${new URLSearchParams({
@@ -249,14 +238,14 @@ async function BlogPage({ searchParams }: BlogPageProps) {
                     sort,
                     page: String(page - 1),
                   }).toString()}`}
-                  className="rounded-full border border-white/20 px-4 py-2 text-sm text-white/80 hover:bg-white/10"
+                  className="blog-pagination__link"
                 >
                   ← Previous
                 </Link>
               ) : (
                 <span />
               )}
-              <div className="text-xs text-white/60">
+              <div className="blog-pagination__status">
                 Page {page} of {totalPages}
               </div>
               {page < totalPages ? (
@@ -266,7 +255,7 @@ async function BlogPage({ searchParams }: BlogPageProps) {
                     sort,
                     page: String(page + 1),
                   }).toString()}`}
-                  className="rounded-full border border-white/20 px-4 py-2 text-sm text-white/80 hover:bg-white/10"
+                  className="blog-pagination__link"
                 >
                   Next →
                 </Link>

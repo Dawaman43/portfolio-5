@@ -59,6 +59,14 @@ export const metadata: Metadata = {
     images: [`${siteUrl}/og-image.jpg`],
     creator: "@dawit_codes",
   },
+  icons: {
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/profile.jpg", type: "image/jpeg" },
+    ],
+    apple: "/apple-touch-icon.png",
+    shortcut: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({
@@ -72,6 +80,7 @@ export default function RootLayout({
     name: "Dawit Worku",
     email: "mailto:dawitworkujima@gmail.com",
     jobTitle: "Software Engineering Student",
+    image: `${siteUrl}/profile.jpg`,
     affiliation: {
       "@type": "CollegeOrUniversity",
       name: "Adama Science and Technology University",
