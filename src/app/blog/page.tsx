@@ -57,12 +57,21 @@ function getParam(sp: SearchParams, key: string): string | undefined {
   return Array.isArray(v) ? v[0] : v;
 }
 
-async function BlogPage({ searchParams }: { searchParams: SearchParams }) {
-  const q = (getParam(searchParams, "q") || "").trim();
-  const sort = (getParam(searchParams, "sort") || "new").toLowerCase();
+type BlogPageProps = {
+  searchParams: Promise<SearchParams> | SearchParams;
+};
+
+async function BlogPage({ searchParams }: BlogPageProps) {
+  const resolvedSearchParams =
+    searchParams instanceof Promise
+      ? await searchParams
+      : (searchParams as SearchParams);
+
+  const q = (getParam(resolvedSearchParams, "q") || "").trim();
+  const sort = (getParam(resolvedSearchParams, "sort") || "new").toLowerCase();
   const page = Math.max(
     1,
-    parseInt(getParam(searchParams, "page") || "1", 10) || 1
+    parseInt(getParam(resolvedSearchParams, "page") || "1", 10) || 1
   );
   const pageSize = 6;
   const from = (page - 1) * pageSize;
@@ -192,19 +201,17 @@ async function BlogPage({ searchParams }: { searchParams: SearchParams }) {
               href={`/blog/${encodeURIComponent(post.slug)}`}
               className="group block"
             >
-              <article className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-6 md:p-7 transition duration-300 ease-out hover:-translate-y-1 hover:border-white/20">
-                {post.cover_image && (
+              <article className="blog-card rounded-2xl border border-white/10 p-6 md:p-7 transition duration-300 ease-out hover:-translate-y-1 hover:border-white/20">
+                {post.cover_image ? (
                   <div
-                    className="absolute inset-0 opacity-60 transition duration-300 group-hover:opacity-75"
+                    className="blog-card__media"
                     style={{
                       backgroundImage: `url(${post.cover_image})`,
-                      backgroundSize: "cover",
-                      backgroundPosition: "center",
                     }}
                   />
-                )}
-                <div className="absolute inset-0 bg-gradient-to-br from-[#020617] via-[#020617]/86 to-transparent" />
-                <div className="relative z-10 space-y-4">
+                ) : null}
+                <div className="blog-card__overlay" />
+                <div className="blog-card__content space-y-4">
                   <div className="flex flex-wrap items-center gap-3 text-xs uppercase tracking-[0.3em] text-white/60">
                     <span>{formatDate(post.created_at)}</span>
                     {isNewPost(post.created_at) ? (

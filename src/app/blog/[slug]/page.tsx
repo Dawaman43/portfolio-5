@@ -77,9 +77,11 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }> | { slug: string };
 }) {
-  const decodedSlug = decodeURIComponent(params.slug);
+  const resolvedParams =
+    params instanceof Promise ? await params : (params as { slug: string });
+  const decodedSlug = decodeURIComponent(resolvedParams.slug);
   const post = await getPost(decodedSlug);
 
   if (!post) {
@@ -117,8 +119,14 @@ export async function generateMetadata({
   };
 }
 
-async function BlogPostPage({ params }: { params: { slug: string } }) {
-  const encodedSlug = params.slug;
+type BlogPostPageProps = {
+  params: Promise<{ slug: string }> | { slug: string };
+};
+
+async function BlogPostPage({ params }: BlogPostPageProps) {
+  const resolvedParams =
+    params instanceof Promise ? await params : (params as { slug: string });
+  const encodedSlug = resolvedParams.slug;
   const slug = decodeURIComponent(encodedSlug);
   const post = await getPost(slug);
 
@@ -193,7 +201,7 @@ async function BlogPostPage({ params }: { params: { slug: string } }) {
             <ShareButtons title={post.title} url={canonicalUrl} />
           </div>
           {post.cover_image && (
-            <div className="relative w-full overflow-hidden rounded-2xl border border-white/10 bg-white/5 shadow-lg shadow-black/20">
+            <div className="blog-cover">
               <Image
                 src={post.cover_image}
                 alt={post.title}
@@ -202,7 +210,7 @@ async function BlogPostPage({ params }: { params: { slug: string } }) {
                 className="h-auto w-full object-cover"
                 priority
               />
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#020617]/70 via-transparent" />
+              <div className="blog-cover__scrim" />
             </div>
           )}
         </header>
