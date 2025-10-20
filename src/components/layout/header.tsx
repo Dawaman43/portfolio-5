@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { gsap } from "gsap";
 
 import { inter } from "@/lib/fonts";
 
@@ -19,6 +20,7 @@ function Header() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [hovering, setHovering] = useState(false);
+  const menuRef = useRef<HTMLUListElement | null>(null);
 
   useEffect(() => {
     setOpen(false);
@@ -33,6 +35,40 @@ function Header() {
     }
     return () => document.documentElement.classList.remove("header-hover");
   }, [hovering]);
+
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (open) {
+      const prev = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = prev;
+      };
+    }
+  }, [open]);
+
+  // Animate mobile menu and items with GSAP when opening
+  useEffect(() => {
+    if (!open || !menuRef.current) return;
+    const ctx = gsap.context(() => {
+      const items = menuRef.current!.querySelectorAll("li");
+      // Menu panel subtle drop-in
+      gsap.fromTo(
+        ".mobile-nav-menu",
+        { y: -6, opacity: 0.0, scale: 0.98 },
+        { y: 0, opacity: 1, scale: 1, duration: 0.22, ease: "power2.out" }
+      );
+      // Stagger in each link
+      gsap.from(items, {
+        y: 10,
+        opacity: 0,
+        duration: 0.2,
+        ease: "power2.out",
+        stagger: 0.05,
+      });
+    }, menuRef);
+    return () => ctx.revert();
+  }, [open]);
 
   return (
     <header
@@ -120,8 +156,19 @@ function Header() {
               </button>
             </div>
             {open && (
-              <div className="md:hidden mt-3 animate-[fadeUp_0.2s_ease-out]">
-                <ul className="glass-panel mobile-nav-menu px-5 py-4 space-y-2 text-left">
+              <div className="md:hidden mt-3 relative">
+                {/* translucent overlay to close menu on tap */}
+                <button
+                  aria-hidden
+                  tabIndex={-1}
+                  className="fixed inset-0 z-40 bg-black/40"
+                  onClick={() => setOpen(false)}
+                />
+                <ul
+                  ref={menuRef}
+                  data-mobile-menu
+                  className="glass-panel mobile-nav-menu px-5 py-4 space-y-2 text-left relative z-50"
+                >
                   {navLinks.map((link) => {
                     const isActive =
                       pathname === link.href ||
@@ -133,6 +180,7 @@ function Header() {
                           className={`${inter.className} mobile-nav-link ${
                             isActive ? "mobile-nav-link--active" : ""
                           }`}
+                          onClick={() => setOpen(false)}
                         >
                           {link.name}
                         </Link>
