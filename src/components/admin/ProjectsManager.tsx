@@ -54,9 +54,14 @@ function ProjectsManager() {
     e.preventDefault();
     setLoading(true);
     setError(null);
-    const payload: any = { ...form };
-    if (Array.isArray(payload.tags))
-      payload.tags = payload.tags.filter(Boolean);
+    const payload: ProjectUpsert = {
+      ...form,
+      // normalize tags: remove empties; store null if empty
+      tags:
+        Array.isArray(form.tags) && form.tags.length
+          ? form.tags.filter((t) => !!t)
+          : null,
+    };
     const { error: upsertError } = await supabase
       .from("projects")
       .upsert(payload);
