@@ -5,6 +5,7 @@ import { renderMarkdown } from "@/lib/markdown";
 import CommentSection from "@/components/blog/CommentSection";
 import ShareButtons from "@/components/blog/ShareButtons";
 import CodeBlockEnhancer from "@/components/blog/CodeBlockEnhancer";
+import { normalizeSlug, slugMatches } from "@/lib/utils";
 
 export const revalidate = 60;
 
@@ -28,13 +29,66 @@ type CommentRecord = {
   likes: number | null;
 };
 
-async function getPost(slug: string) {
-  const { data } = await supabase
+function buildSlugCandidates(rawSlug: string) {
+  const decoded = (() => {
+    try {
+      return decodeURIComponent(rawSlug);
+    } catch {
+      return rawSlug;
+    }
+  })();
+
+  const normalizedSpace = decoded.replace(/[-_]+/g, " ");
+
+  return Array.from(
+    new Set(
+      [rawSlug, decoded, normalizedSpace]
+        .map((value) => value.trim())
+        .filter(Boolean)
+    )
+  );
+}
+
+async function getPost(rawSlug: string) {
+  const candidates = buildSlugCandidates(rawSlug);
+
+  for (const candidate of candidates) {
+    const { data, error } = await supabase
+      .from("blogs")
+      .select("id, title, slug, excerpt, content, cover_image, created_at")
+      .eq("slug", candidate)
+      .maybeSingle();
+
+    if (error) {
+      throw error;
+    }
+
+    if (data) {
+      return data as Blog;
+    }
+  }
+
+  const { data, error } = await supabase
     .from("blogs")
     .select("id, title, slug, excerpt, content, cover_image, created_at")
-    .eq("slug", slug)
-    .maybeSingle();
-  return (data as Blog | null) ?? null;
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    throw error;
+  }
+
+  const normalizedTarget = normalizeSlug(candidates[0] ?? rawSlug);
+  const posts = (data ?? []) as Blog[];
+
+  const fallback = posts.find((post) => {
+    if (!post.slug) return false;
+    return (
+      candidates.some((candidate) => slugMatches(post.slug, candidate)) ||
+      normalizeSlug(post.slug) === normalizedTarget
+    );
+  });
+
+  return fallback ?? null;
 }
 
 async function getCommentSnapshot(slug: string) {
@@ -81,8 +135,8 @@ export async function generateMetadata({
 }) {
   const resolvedParams =
     params instanceof Promise ? await params : (params as { slug: string });
-  const decodedSlug = decodeURIComponent(resolvedParams.slug);
-  const post = await getPost(decodedSlug);
+  const rawSlug = resolvedParams.slug;
+  const post = await getPost(rawSlug);
 
   if (!post) {
     return { title: "Blog post not found" };
@@ -126,9 +180,8 @@ type BlogPostPageProps = {
 async function BlogPostPage({ params }: BlogPostPageProps) {
   const resolvedParams =
     params instanceof Promise ? await params : (params as { slug: string });
-  const encodedSlug = resolvedParams.slug;
-  const slug = decodeURIComponent(encodedSlug);
-  const post = await getPost(slug);
+  const rawSlug = resolvedParams.slug;
+  const post = await getPost(rawSlug);
 
   if (!post) {
     notFound();

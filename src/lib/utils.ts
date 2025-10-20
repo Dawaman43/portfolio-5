@@ -53,3 +53,59 @@ export function isNewPost(
   const windowMs = recentWindowDays * 24 * 60 * 60 * 1000;
   return Date.now() - timestamp < windowMs;
 }
+
+export function normalizeSlug(value: string): string {
+  if (!value) {
+    return "";
+  }
+
+  const decoded = (() => {
+    try {
+      return decodeURIComponent(value);
+    } catch {
+      return value;
+    }
+  })();
+
+  const trimmed = decoded.trim().toLowerCase();
+  if (!trimmed) {
+    return "";
+  }
+
+  const stripped = trimmed
+    .normalize("NFKD")
+    .replace(/[^\w\s-]/g, "")
+    .replace(/[\s_-]+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-+|-+$/g, "");
+
+  return stripped;
+}
+
+export function slugMatches(source: string | null | undefined, target: string) {
+  if (!source) return false;
+  const baseSource = source.trim();
+  if (!baseSource) return false;
+
+  const decodedSource = (() => {
+    try {
+      return decodeURIComponent(baseSource);
+    } catch {
+      return baseSource;
+    }
+  })();
+
+  const decodedTarget = (() => {
+    try {
+      return decodeURIComponent(target.trim());
+    } catch {
+      return target.trim();
+    }
+  })();
+
+  if (baseSource === target || decodedSource === decodedTarget) {
+    return true;
+  }
+
+  return normalizeSlug(baseSource) === normalizeSlug(target);
+}

@@ -1,3 +1,5 @@
+import { slugMatches } from "./utils";
+
 export type CaseStudyMetric = {
   label: string;
   value: string;
@@ -297,5 +299,5 @@ export const caseStudies: CaseStudy[] = [
 ];
 
 export function getCaseStudy(slug: string) {
-  return caseStudies.find((item) => item.slug === slug);
+  return caseStudies.find((item) => slugMatches(item.slug, slug));
 }
