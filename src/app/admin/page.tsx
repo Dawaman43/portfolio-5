@@ -2,16 +2,21 @@
 
 import { useEffect, useState } from "react";
 
+import AdminHeader from "../../components/admin/AdminHeader";
 import BlogManager from "../../components/admin/BlogManager";
 import CertificateManager from "../../components/admin/CertificateManager";
 import SkillManager from "../../components/admin/SkillManager";
 import BacklinkManager from "../../components/admin/BacklinkManager";
+import ProjectsManager from "../../components/admin/ProjectsManager";
+import SiteSettings from "../../components/admin/SiteSettings";
 
 const tabs = [
   { id: "blogs", label: "Blogs" },
+  { id: "projects", label: "Projects" },
   { id: "certificates", label: "Certificates" },
   { id: "skills", label: "Skills" },
   { id: "backlinks", label: "Backlinks" },
+  { id: "settings", label: "Site Settings" },
 ];
 
 function AdminPage() {
@@ -78,6 +83,7 @@ function AdminPage() {
             </button>
           ) : null}
         </div>
+        <AdminHeader />
 
         {!authed ? (
           <form
@@ -153,9 +159,11 @@ function AdminPage() {
         )}
 
         {authed && activeTab === "blogs" && <BlogManager />}
+        {authed && activeTab === "projects" && <ProjectsManager />}
         {authed && activeTab === "certificates" && <CertificateManager />}
         {authed && activeTab === "skills" && <SkillManager />}
         {authed && activeTab === "backlinks" && <BacklinkManager />}
+        {authed && activeTab === "settings" && <SiteSettings />}
       </section>
     </main>
   );
