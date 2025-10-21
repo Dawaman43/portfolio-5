@@ -4,7 +4,9 @@ import { NextResponse } from "next/server";
 const ADMIN_HOSTS = new Set(["admin.dawitworku.tech", "admin.daiwtworku.tech"]);
 
 export function middleware(request: NextRequest) {
-  const host = request.headers.get("host")?.toLowerCase() ?? "";
+  const rawHost =
+    request.headers.get("x-forwarded-host") ?? request.headers.get("host");
+  const host = rawHost?.split(",")[0]?.trim().toLowerCase() ?? "";
   const { pathname } = request.nextUrl;
 
   // Serve custom icons from profile.jpg (bypass default Next icon)
@@ -27,8 +29,10 @@ export function middleware(request: NextRequest) {
   }
 
   if (ADMIN_HOSTS.has(host)) {
-    // Allow API routes to remain at /api when served from the admin subdomain
-    if (!pathname.startsWith("/admin") && !pathname.startsWith("/api")) {
+    // Allow API and Next.js internal assets/data to remain at their original paths
+    const isInternal =
+      pathname.startsWith("/api") || pathname.startsWith("/_next");
+    if (!pathname.startsWith("/admin") && !isInternal) {
       const url = request.nextUrl.clone();
       url.pathname = `/admin${pathname === "/" ? "" : pathname}`;
       return NextResponse.rewrite(url);
