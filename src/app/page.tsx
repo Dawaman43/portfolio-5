@@ -1,5 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import type { CSSProperties } from "react";
 import IntroOverlay from "@/components/ui/IntroOverlay";
 import TiltCard from "@/components/ui/TiltCard";
@@ -190,18 +198,14 @@ function Home() {
               className="mt-8 flex items-center justify-center md:justify-start gap-3 md:gap-4"
               data-hero-item
             >
-              <Link
-                href="/projects"
-                className="rounded-full px-5 md:px-6 py-2.5 md:py-3 bg-white text-black font-semibold shadow hover:bg-white/90 transition"
-              >
-                View Projects
-              </Link>
-              <Link
-                href="mailto:dawitworkujima@gmail.com"
-                className="rounded-full px-5 md:px-6 py-2.5 md:py-3 border border-white/20 bg-white/10 backdrop-blur-md hover:bg-white/15 transition"
-              >
-                Let&#39;s talk
-              </Link>
+              <Button asChild>
+                <Link href="/projects">View Projects</Link>
+              </Button>
+              <Button asChild variant="outline">
+                <Link href="mailto:dawitworkujima@gmail.com">
+                  Let&#39;s talk
+                </Link>
+              </Button>
             </div>
             {/* Stats + Social */}
             <div
@@ -343,27 +347,22 @@ function Home() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           {focusHighlights.map((item) => (
-            <TiltCard
-              key={item.title}
-              className="group glass-panel p-6 md:p-7 transition-transform duration-300 hover:-translate-y-1 will-change-transform"
-              data-reveal-child
-            >
-              <div className="w-10 h-10 mb-4 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-white/80">
-                <span className="text-lg">•</span>
-              </div>
-              <h3 className="text-lg md:text-xl font-semibold">{item.title}</h3>
-              <p className="mt-2 text-sm md:text-base text-white/75 leading-relaxed">
-                {item.description}
-              </p>
-              <ul className="mt-4 space-y-2 text-sm text-white/70">
-                {item.bullets.map((point) => (
-                  <li key={point} className="flex items-center gap-2">
-                    <span className="inline-block h-1.5 w-1.5 rounded-full bg-white/60" />
-                    {point}
-                  </li>
-                ))}
-              </ul>
-            </TiltCard>
+            <Card key={item.title} data-reveal-child>
+              <CardHeader>
+                <CardTitle>{item.title}</CardTitle>
+                <CardDescription>{item.description}</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ul className="mt-1 space-y-2 text-sm text-white/70">
+                  {item.bullets.map((point) => (
+                    <li key={point} className="flex items-center gap-2">
+                      <span className="inline-block h-1.5 w-1.5 rounded-full bg-white/60" />
+                      {point}
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
           ))}
         </div>
       </section>

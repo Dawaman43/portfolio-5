@@ -1,5 +1,15 @@
 import Image from "next/image";
+import Link from "next/link";
 import supabase from "@/lib/supabase";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 type Certificate = {
   id: string;
@@ -56,83 +66,88 @@ async function CertificatesPage() {
     <main className="px-4 md:px-6 py-16 md:py-24">
       <section className="max-w-5xl mx-auto space-y-10">
         <header className="space-y-3 text-center md:text-left">
-          <span className="inline-flex items-center rounded-full border border-white/20 bg-white/10 px-4 py-1 text-xs uppercase tracking-[0.3em] text-white/70">
+          <Badge variant="outline" className="uppercase tracking-[0.3em]">
             Certificates
-          </span>
-          <h1 className="text-3xl md:text-4xl font-extrabold">
+          </Badge>
+          <h1 className="text-3xl md:text-4xl font-extrabold text-foreground">
             Continuing education
           </h1>
-          <p className="text-sm md:text-base text-white/75 md:max-w-3xl">
+          <p className="text-sm md:text-base text-muted-foreground md:max-w-3xl">
             I invest in structured learning to stay sharp across full-stack
             development, Android engineering, and applied AI.
           </p>
         </header>
 
         {!!fetchError && (
-          <p className="text-sm text-red-300">Failed to load certificates.</p>
+          <Card className="border-red-500/40">
+            <CardContent className="p-4 text-sm text-red-300">
+              Failed to load certificates.
+            </CardContent>
+          </Card>
         )}
         <div className="space-y-4">
           {certificates.length === 0 ? (
-            <div className="glass-panel p-6 md:p-7 text-white/70 text-sm">
-              No certificates yet.
-            </div>
+            <Card>
+              <CardContent className="p-6 md:p-7 text-muted-foreground text-sm">
+                No certificates yet.
+              </CardContent>
+            </Card>
           ) : (
             certificates.map((certificate) => (
-              <article key={certificate.id} className="glass-panel p-6 md:p-7">
-                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+              <Card key={certificate.id}>
+                <CardHeader className="flex-row items-center justify-between gap-3">
                   <div>
-                    <h2 className="text-xl font-semibold text-white">
+                    <CardTitle className="text-xl">
                       {certificate.title}
-                    </h2>
+                    </CardTitle>
                     {certificate.issuer ? (
-                      <p className="text-sm text-white/70">
-                        {certificate.issuer}
-                      </p>
+                      <CardDescription>{certificate.issuer}</CardDescription>
                     ) : null}
                   </div>
                   {certificate.year ? (
-                    <span className="text-xs uppercase tracking-widest text-white/60">
-                      {certificate.year}
-                    </span>
+                    <Badge variant="outline">{certificate.year}</Badge>
                   ) : null}
-                </div>
-                {certificate.description ? (
-                  <p className="mt-3 text-sm md:text-base text-white/75 leading-relaxed">
-                    {certificate.description}
-                  </p>
-                ) : null}
-                {certificate.file_url ? (
-                  <div className="mt-4 space-y-3">
-                    {isImageUrl(certificate.file_url) ? (
-                      <div className="relative w-full max-w-xl aspect-[4/3] rounded-xl border border-white/10 bg-black/20 overflow-hidden">
-                        <Image
-                          src={certificate.file_url}
-                          alt={certificate.title}
-                          fill
-                          className="object-contain"
-                          sizes="(max-width: 768px) 100vw, 640px"
-                        />
-                      </div>
-                    ) : isPdfUrl(certificate.file_url) ? (
-                      <div className="rounded-xl border border-white/10 bg-black/20 overflow-hidden w-full max-w-xl h-80">
-                        <iframe
-                          src={certificate.file_url}
-                          title={`${certificate.title} document`}
-                          className="w-full h-full"
-                        />
-                      </div>
-                    ) : null}
-                    <a
-                      href={certificate.file_url}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-sm text-white/90 hover:bg-white/15"
-                    >
-                      View file <span aria-hidden>↗</span>
-                    </a>
-                  </div>
-                ) : null}
-              </article>
+                </CardHeader>
+                <CardContent>
+                  {certificate.description ? (
+                    <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+                      {certificate.description}
+                    </p>
+                  ) : null}
+                  {certificate.file_url ? (
+                    <div className="mt-4 space-y-3">
+                      {isImageUrl(certificate.file_url) ? (
+                        <div className="relative w-full max-w-xl aspect-[4/3] rounded-xl border border-white/10 bg-black/20 overflow-hidden">
+                          <Image
+                            src={certificate.file_url}
+                            alt={certificate.title}
+                            fill
+                            className="object-contain"
+                            sizes="(max-width: 768px) 100vw, 640px"
+                          />
+                        </div>
+                      ) : isPdfUrl(certificate.file_url) ? (
+                        <div className="rounded-xl border border-white/10 bg-black/20 overflow-hidden w-full max-w-xl h-80">
+                          <iframe
+                            src={certificate.file_url}
+                            title={`${certificate.title} document`}
+                            className="w-full h-full"
+                          />
+                        </div>
+                      ) : null}
+                      <Button asChild variant="outline">
+                        <Link
+                          href={certificate.file_url!}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          View file ↗
+                        </Link>
+                      </Button>
+                    </div>
+                  ) : null}
+                </CardContent>
+              </Card>
             ))
           )}
         </div>

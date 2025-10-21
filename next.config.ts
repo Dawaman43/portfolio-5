@@ -1,5 +1,8 @@
 import type { NextConfig } from "next";
 
+// Ensure Turbopack uses this folder as the root to avoid lockfile mis-detection
+// and internal module resolution errors.
+// See: https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack#root-directory
 const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
@@ -20,6 +23,9 @@ const nextConfig: NextConfig = {
         hostname: "images.unsplash.com",
       },
     ],
+  },
+  turbopack: {
+    root: __dirname,
   },
 };
 

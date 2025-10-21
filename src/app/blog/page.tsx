@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { Badge } from "@/components/ui/badge";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import type { Metadata } from "next";
 import supabase from "@/lib/supabase";
 
@@ -117,9 +119,11 @@ async function BlogPage({ searchParams }: BlogPageProps) {
         </header>
 
         {error && (
-          <p className="text-sm text-red-300">
-            Could not load articles right now. Refresh or check back shortly.
-          </p>
+          <Alert variant="destructive">
+            <AlertDescription>
+              Could not load articles right now. Refresh or check back shortly.
+            </AlertDescription>
+          </Alert>
         )}
 
         {/* Search and controls */}
@@ -211,7 +215,7 @@ async function BlogPage({ searchParams }: BlogPageProps) {
                       {formatDate(post.created_at)}
                     </span>
                     {isNewPost(post.created_at) ? (
-                      <span className="blog-card__badge">New</span>
+                      <Badge className="blog-card__badge">New</Badge>
                     ) : null}
                   </div>
                   <h2 className="blog-card__title">{post.title}</h2>

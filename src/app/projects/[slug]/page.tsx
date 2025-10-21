@@ -2,6 +2,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { caseStudies, getCaseStudy } from "@/lib/caseStudies";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
 export function generateStaticParams() {
   return caseStudies.map(({ slug }) => ({ slug }));
@@ -10,11 +12,9 @@ export function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ slug: string }> | { slug: string };
+  params: { slug: string };
 }): Promise<Metadata> {
-  const resolvedParams =
-    params instanceof Promise ? await params : (params as { slug: string });
-  const project = getCaseStudy(resolvedParams.slug);
+  const project = getCaseStudy(params.slug);
   if (!project) {
     return {
       title: "Project not found",
@@ -38,13 +38,11 @@ export async function generateMetadata({
 }
 
 type CaseStudyPageProps = {
-  params: Promise<{ slug: string }> | { slug: string };
+  params: { slug: string };
 };
 
 export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
-  const resolvedParams =
-    params instanceof Promise ? await params : (params as { slug: string });
-  const project = getCaseStudy(resolvedParams.slug);
+  const project = getCaseStudy(params.slug);
 
   if (!project) notFound();
 
@@ -76,16 +74,15 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
         </p>
         <div className="flex flex-wrap gap-3">
           {project.links.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              target={link.external ? "_blank" : undefined}
-              rel={link.external ? "noreferrer" : undefined}
-              className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm font-semibold text-foreground hover:bg-white/15 transition"
-            >
-              {link.label}
-              {link.external ? <span aria-hidden>↗</span> : null}
-            </Link>
+            <Button key={link.href} asChild variant="outline">
+              <Link
+                href={link.href}
+                target={link.external ? "_blank" : undefined}
+                rel={link.external ? "noreferrer" : undefined}
+              >
+                {link.label} {link.external ? <span aria-hidden>↗</span> : null}
+              </Link>
+            </Button>
           ))}
         </div>
       </header>
@@ -114,16 +111,13 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
         </div>
         <aside className="glass-panel p-6 md:p-8 space-y-5">
           <h2 className="text-xl font-semibold text-foreground">Stack</h2>
-          <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-muted-foreground">
+          <div className="flex flex-wrap gap-2 text-sm text-muted-foreground">
             {project.stack.map((tool) => (
-              <li
-                key={tool}
-                className="rounded-full border border-white/15 bg-white/5 px-3 py-1"
-              >
+              <Badge key={tool} variant="outline" className="text-white/80">
                 {tool}
-              </li>
+              </Badge>
             ))}
-          </ul>
+          </div>
         </aside>
       </section>
 

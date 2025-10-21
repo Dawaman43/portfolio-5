@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import Image from "next/image";
 import supabase from "@/lib/supabase";
 import { renderMarkdown } from "@/lib/markdown";
@@ -131,11 +132,9 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ slug: string }> | { slug: string };
-}) {
-  const resolvedParams =
-    params instanceof Promise ? await params : (params as { slug: string });
-  const rawSlug = resolvedParams.slug;
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug: rawSlug } = await params;
   const post = await getPost(rawSlug);
 
   if (!post) {
@@ -174,13 +173,11 @@ export async function generateMetadata({
 }
 
 type BlogPostPageProps = {
-  params: Promise<{ slug: string }> | { slug: string };
+  params: Promise<{ slug: string }>;
 };
 
 async function BlogPostPage({ params }: BlogPostPageProps) {
-  const resolvedParams =
-    params instanceof Promise ? await params : (params as { slug: string });
-  const rawSlug = resolvedParams.slug;
+  const { slug: rawSlug } = await params;
   const post = await getPost(rawSlug);
 
   if (!post) {

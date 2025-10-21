@@ -1,4 +1,9 @@
 import Link from "next/link";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
 
 const contacts = [
   {
@@ -42,52 +47,82 @@ function ContactPage() {
           </p>
         </header>
 
-        <section className="glass-panel p-6 md:p-8 space-y-4">
-          <h2 className="text-xl font-semibold">Direct contact</h2>
-          <ul className="space-y-3 text-sm text-white/80">
-            {contacts.map((item) => (
-              <li
-                key={item.label}
-                className="flex flex-col md:flex-row md:items-center md:justify-between gap-2"
-              >
-                <span className="uppercase tracking-widest text-xs text-white/60">
-                  {item.label}
-                </span>
-                <Link
-                  href={item.href}
-                  target={item.href.startsWith("http") ? "_blank" : undefined}
-                  rel={item.href.startsWith("http") ? "noreferrer" : undefined}
-                  className="text-sm md:text-base font-semibold text-white hover:text-white/80 transition"
+        <Card>
+          <CardHeader>
+            <CardTitle>Direct contact</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ul className="space-y-3 text-sm text-white/80">
+              {contacts.map((item) => (
+                <li
+                  key={item.label}
+                  className="flex flex-col md:flex-row md:items-center md:justify-between gap-2"
                 >
-                  {item.value}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </section>
+                  <span className="uppercase tracking-widest text-xs text-white/60">
+                    {item.label}
+                  </span>
+                  <Link
+                    href={item.href}
+                    target={item.href.startsWith("http") ? "_blank" : undefined}
+                    rel={
+                      item.href.startsWith("http") ? "noreferrer" : undefined
+                    }
+                    className="text-sm md:text-base font-semibold text-white hover:text-white/80 transition"
+                  >
+                    {item.value}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </CardContent>
+        </Card>
 
-        <section className="glass-panel p-6 md:p-8 space-y-4">
-          <h2 className="text-xl font-semibold">Project kickoff guide</h2>
-          <p className="text-sm md:text-base text-white/75">
-            When you reach out, it helps to include a quick overview of the
-            problem, ideal timeline, and current stack. I’ll follow up with
-            clarifying questions and a proposal for the next steps.
-          </p>
-          <div className="flex flex-wrap gap-3 text-sm">
-            <Link
-              href="mailto:dawitworkujima@gmail.com"
-              className="rounded-full bg-white px-4 py-2 font-semibold text-black hover:bg-white/90 transition"
+        <Card>
+          <CardHeader>
+            <CardTitle>Project kickoff</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <p className="text-sm md:text-base text-white/75">
+              When you reach out, include a quick overview of the problem,
+              desired timeline, and current stack. I’ll follow up with
+              clarifying questions and next steps.
+            </p>
+            <form
+              action="mailto:dawitworkujima@gmail.com"
+              className="space-y-4"
             >
-              Email me directly
-            </Link>
-            <Link
-              href="/projects"
-              className="rounded-full border border-white/20 bg-white/10 px-4 py-2 text-white/80 hover:bg-white/15 transition"
-            >
-              Browse past work
-            </Link>
-          </div>
-        </section>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <Label htmlFor="name">Name</Label>
+                  <Input id="name" name="name" placeholder="Your name" />
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    name="email"
+                    placeholder="you@example.com"
+                  />
+                </div>
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="message">Project brief</Label>
+                <Textarea
+                  id="message"
+                  name="message"
+                  placeholder="What are we building? Goals, constraints, timelines..."
+                />
+              </div>
+              <div className="flex flex-wrap gap-3">
+                <Button type="submit">Email me directly</Button>
+                <Button asChild variant="outline">
+                  <Link href="/projects">Browse past work</Link>
+                </Button>
+              </div>
+            </form>
+          </CardContent>
+        </Card>
       </section>
     </main>
   );

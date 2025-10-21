@@ -20,6 +20,13 @@
   z-index: 60;
   transition: width 0.2s ease;
 }
+/* Ensure buttons use pointer cursor per Tailwind v4 change */
+@layer base {
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+}
 @import "tailwindcss";
 
 :root {
@@ -43,6 +50,20 @@
   --markdown-table-head-bg: rgba(148, 163, 184, 0.12);
   --markdown-table-head-text: var(--foreground);
   --markdown-img-border: rgba(255, 255, 255, 0.08);
+  /* Map CSS vars to fallback stacks when next/font is disabled */
+  --font-geist-sans: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol";
+  --font-geist-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+  --font-inter: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol";
+  --font-poppins: Poppins, Inter, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial;
+  --font-playfair: "Playfair Display", Georgia, "Times New Roman", serif;
+  --font-oswald: Oswald, Inter, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial;
 }
 
 .text-foreground {
@@ -668,6 +689,14 @@
 html {
   background: var(--background);
   scroll-behavior: smooth;
+  /* Hide default scrollbar (IE/Edge legacy + Firefox) */
+  -ms-overflow-style: none; /* IE/Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+/* Hide default scrollbar (Chromium/WebKit) for the viewport */
+html::-webkit-scrollbar {
+  display: none;
 }
 
 body {
@@ -685,15 +714,40 @@ body {
     radial-gradient(120% 160% at 0% 80%, rgba(236, 72, 153, 0.18), transparent),
     var(--background);
   color: var(--foreground);
-  font-family: var(--font-inter, system-ui), -apple-system, BlinkMacSystemFont,
-    "Segoe UI", Roboto, "Helvetica Neue", Arial, "Apple Color Emoji",
-    "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol";
   -ms-overflow-style: none; /* IE/Edge */
   scrollbar-width: none; /* Firefox */
 }
 
+/* Map CSS vars to fallback stacks when next/font is disabled */
+:root {
+  --font-geist-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-geist-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+  --font-inter: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  --font-poppins: Poppins, "Inter", -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-playfair: "Playfair Display", Georgia, "Times New Roman", serif;
+  --font-roboto-slab: "Roboto Slab", Georgia, "Times New Roman", serif;
+  --font-oswald: Oswald, "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
 body::-webkit-scrollbar {
   display: none;
+}
+
+/* Utility: hide scrollbar on any scrollable container while preserving scroll */
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE/Edge */
+  scrollbar-width: none; /* Firefox */
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none; /* Chromium/WebKit */
 }
 
 h1,
@@ -704,7 +758,7 @@ h5,
 h6 {
   font-family: var(
     --font-playfair,
-    var(--font-inter, system-ui),
+    var(--font-inter),
     -apple-system,
     BlinkMacSystemFont,
     "Segoe UI",
@@ -1565,6 +1619,36 @@ samp {
   pointer-events: none;
 }
 
+/* Home Page Styles */
+.home-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 2rem;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+.home-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.home-subtitle {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+  color: #555;
+}
+
+.home-content {
+  max-width: 800px;
+  width: 100%;
+  text-align: center;
+}
+
 /* Simple animation utilities */
 .fade-up {
   opacity: 0;
@@ -1785,8 +1869,8 @@ main > section {
 }
 
 .markdown-body .md-font-sans {
-  font-family: var(--font-inter, system-ui), -apple-system, BlinkMacSystemFont,
-    "Segoe UI", Roboto, "Helvetica Neue", Arial !important;
+  font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial !important;
 }
 
 .markdown-body .md-font-serif {
@@ -2360,8 +2444,8 @@ main > section {
   bottom: 1rem;
   width: 8px;
   z-index: 60;
-  pointer-events: none;
-  opacity: 0.9;
+  pointer-events: auto; /* interactive */
+  opacity: 0.95;
 }
 .scroll-rail__track {
   position: absolute;
@@ -2374,7 +2458,7 @@ main > section {
 .scroll-rail__thumb {
   position: absolute;
   left: 0;
-  bottom: 0;
+  top: 0; /* we now position with top based on scroll */
   width: 100%;
   background: linear-gradient(
     180deg,
@@ -2382,7 +2466,9 @@ main > section {
     rgba(236, 72, 153, 0.95)
   );
   box-shadow: 0 0 12px rgba(99, 102, 241, 0.5);
-  transition: height 0.2s ease-out;
+  border-radius: 999px;
+  transition: height 0.16s ease-out, top 0.16s ease-out,
+    transform 0.16s ease-out, box-shadow 0.16s ease-out;
 }
 .scroll-rail__glow {
   position: absolute;
@@ -2392,6 +2478,201 @@ main > section {
     rgba(255, 255, 255, 0.4),
     transparent 70%
   );
+}
+
+/* Markers for each main section */
+.scroll-rail__marker {
+  position: absolute;
+  left: 0;
+  transform: translateY(-50%);
+  width: 100%;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.4);
+  mix-blend-mode: screen;
+  opacity: 0.5;
+}
+.scroll-rail__marker.is-active {
+  background: linear-gradient(
+    90deg,
+    rgba(99, 102, 241, 0.9),
+    rgba(236, 72, 153, 0.9)
+  );
+  box-shadow: 0 0 8px rgba(99, 102, 241, 0.7);
+  opacity: 1;
+}
+
+/* Tooltip preview */
+.scroll-rail__tooltip {
+  position: absolute;
+  right: 120%;
+  transform: translateY(-50%);
+  min-width: 200px;
+  max-width: 280px;
+  padding: 0.6rem 0.8rem;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  background: rgba(2, 6, 23, 0.9);
+  color: rgba(248, 250, 252, 0.96);
+  box-shadow: 0 16px 32px rgba(2, 6, 23, 0.5);
+  backdrop-filter: blur(12px) saturate(130%);
+  -webkit-backdrop-filter: blur(12px) saturate(130%);
+  pointer-events: none;
+  animation: fadeUp 160ms ease-out;
+}
+.scroll-rail__tooltip::after {
+  content: "";
+  position: absolute;
+  right: -6px;
+  top: 50%;
+  transform: translateY(-50%) rotate(45deg);
+  width: 12px;
+  height: 12px;
+  background: inherit;
+  border-right: 1px solid rgba(148, 163, 184, 0.25);
+  border-top: 1px solid rgba(148, 163, 184, 0.25);
+}
+.scroll-rail__tooltip-title {
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+.scroll-rail__tooltip-snippet {
+  margin-top: 0.25rem;
+  font-size: 0.8rem;
+  color: rgba(226, 232, 240, 0.85);
+}
+
+/* Hover/drag affordances */
+.scroll-rail:hover .scroll-rail__thumb {
+  transform: scaleX(1.1);
+  box-shadow: 0 0 16px rgba(99, 102, 241, 0.7);
+}
+.scroll-rail .scroll-rail__thumb.is-dragging {
+  transform: scaleX(1.15);
+  box-shadow: 0 0 18px rgba(99, 102, 241, 0.9);
+}
+
+/* Hover highlight line */
+.scroll-rail__hoverline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.6);
+  mix-blend-mode: screen;
+}
+
+/* Percent readout bubble */
+.scroll-rail__percent {
+  position: absolute;
+  right: 120%;
+  transform: translateY(-50%);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.5rem;
+  font-size: 0.75rem;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  background: rgba(2, 6, 23, 0.9);
+  color: rgba(248, 250, 252, 0.96);
+  box-shadow: 0 10px 20px rgba(2, 6, 23, 0.5);
+}
+
+/* Quick jump buttons */
+.scroll-rail__btn {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  background: rgba(2, 6, 23, 0.8);
+  color: rgba(248, 250, 252, 0.9);
+  display: grid;
+  place-items: center;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: transform 120ms ease, background 120ms ease, box-shadow 120ms ease;
+}
+.scroll-rail__btn:hover {
+  transform: translateX(-50%) scale(1.05);
+  background: rgba(2, 6, 23, 0.92);
+  box-shadow: 0 8px 18px rgba(2, 6, 23, 0.5);
+}
+.scroll-rail__btn--up {
+  top: -1.2rem;
+}
+.scroll-rail__btn--down {
+  bottom: -1.2rem;
+}
+
+/* Stylish modal preview next to rail */
+.scroll-rail__modal {
+  position: absolute;
+  right: 140%;
+  transform: translateY(-50%);
+  display: grid;
+  grid-template-columns: 100px minmax(160px, 260px);
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  background: rgba(2, 6, 23, 0.92);
+  color: rgba(248, 250, 252, 0.96);
+  box-shadow: 0 22px 44px rgba(2, 6, 23, 0.55);
+  backdrop-filter: blur(14px) saturate(135%);
+  -webkit-backdrop-filter: blur(14px) saturate(135%);
+  animation: fadeUp 160ms ease-out;
+}
+.scroll-rail__modal::after {
+  content: "";
+  position: absolute;
+  right: -8px;
+  top: 50%;
+  transform: translateY(-50%) rotate(45deg);
+  width: 14px;
+  height: 14px;
+  background: inherit;
+  border-right: 1px solid rgba(148, 163, 184, 0.25);
+  border-top: 1px solid rgba(148, 163, 184, 0.25);
+}
+.scroll-rail__modal-media {
+  width: 100px;
+  height: 72px;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  background: rgba(15, 23, 42, 0.6);
+}
+.scroll-rail__modal-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.scroll-rail__modal-body {
+  display: grid;
+  gap: 0.25rem;
+}
+.scroll-rail__modal-title {
+  font-weight: 800;
+  font-size: 0.95rem;
+}
+.scroll-rail__modal-text {
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: rgba(226, 232, 240, 0.9);
+  max-height: 5.2rem;
+  overflow: hidden;
+}
+
+/* Reduced motion: limit transitions */
+@media (prefers-reduced-motion: reduce) {
+  .scroll-rail__thumb,
+  .scroll-rail__tooltip {
+    transition: none !important;
+    animation: none !important;
+  }
 }
 
 @keyframes railShimmer {
