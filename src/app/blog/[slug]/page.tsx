@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
 import supabase from "@/lib/supabase";
 import { renderMarkdown } from "@/lib/markdown";
 import CommentSection from "@/components/blog/CommentSection";
@@ -28,6 +29,14 @@ type CommentRecord = {
   created_at: string | null;
   parent_id: string | null;
   likes: number | null;
+};
+
+type RelatedSummary = {
+  id: string;
+  title: string;
+  slug: string;
+  excerpt: string | null;
+  created_at: string | null;
 };
 
 function buildSlugCandidates(rawSlug: string) {
@@ -101,6 +110,21 @@ async function getCommentSnapshot(slug: string) {
   return (data ?? []) as CommentRecord[];
 }
 
+async function getRelatedPosts(postId: string) {
+  const { data, error } = await supabase
+    .from("blogs")
+    .select("id, title, slug, excerpt, created_at")
+    .neq("id", postId)
+    .order("created_at", { ascending: false })
+    .limit(4);
+
+  if (error) {
+    return [] as RelatedSummary[];
+  }
+
+  return (data ?? []) as RelatedSummary[];
+}
+
 function formatDate(value: string | null) {
   if (!value) return "";
   try {
@@ -119,6 +143,38 @@ function calculateReadingTime(content: string | null) {
   const words = content.trim().split(/\s+/).filter(Boolean).length;
   if (!words) return null;
   return Math.max(1, Math.round(words / 180));
+}
+
+type ExtractedHeading = {
+  level: number;
+  title: string;
+  anchor: string;
+};
+
+function stripHtml(value: string) {
+  return value.replace(/<[^>]+>/g, "").trim();
+}
+
+function extractHeadings(html: string | null) {
+  if (!html) {
+    return [] as ExtractedHeading[];
+  }
+
+  const headingPattern = /<h([2-3])[^>]*id="([^"]+)"[^>]*>([\s\S]*?)<\/h\1>/g;
+  const headings: ExtractedHeading[] = [];
+  let match: RegExpExecArray | null;
+
+  while ((match = headingPattern.exec(html)) !== null) {
+    const level = Number(match[1]);
+    const anchor = match[2];
+    const title = stripHtml(match[3]);
+    if (!title) {
+      continue;
+    }
+    headings.push({ level, anchor, title });
+  }
+
+  return headings;
 }
 
 export async function generateStaticParams() {
@@ -185,13 +241,19 @@ async function BlogPostPage({ params }: BlogPostPageProps) {
   }
 
   const readingTime = calculateReadingTime(post.content);
-  const markdownHtml = post.content ? await renderMarkdown(post.content) : null;
+  const [markdownHtml, commentSnapshot, relatedPosts] = await Promise.all([
+    post.content
+      ? renderMarkdown(post.content)
+      : Promise.resolve<string | null>(null),
+    getCommentSnapshot(post.slug),
+    getRelatedPosts(post.id),
+  ]);
   const hasContent = Boolean(markdownHtml && markdownHtml.trim().length > 0);
   const canonicalUrl = `https://dawitworku.tech/blog/${encodeURIComponent(
     post.slug
   )}`;
-  const commentSnapshot = await getCommentSnapshot(post.slug);
   const commentCount = commentSnapshot.length;
+  const tableOfContents = extractHeadings(markdownHtml);
   const structuredComments = commentSnapshot
     .filter((comment) => !comment.parent_id)
     .slice(-5)
@@ -270,6 +332,63 @@ async function BlogPostPage({ params }: BlogPostPageProps) {
 
         <div className="blog-article__divider" />
 
+        <section className="blog-article__overview">
+          <div className="blog-article__stat-grid">
+            <div className="blog-article__stat">
+              <span className="blog-article__stat-label">Status</span>
+              <strong className="blog-article__stat-value">In the lab</strong>
+              <p className="blog-article__stat-note">
+                Capturing build signals, decisions, and monochrome experiments.
+              </p>
+            </div>
+            <div className="blog-article__stat">
+              <span className="blog-article__stat-label">Reading time</span>
+              <strong className="blog-article__stat-value">
+                {readingTime ? `${readingTime} min` : "—"}
+              </strong>
+              <p className="blog-article__stat-note">
+                {readingTime
+                  ? "Estimated focus to absorb the full dispatch."
+                  : "Settle in—length varies across sections."}
+              </p>
+            </div>
+            <div className="blog-article__stat">
+              <span className="blog-article__stat-label">Comments</span>
+              <strong className="blog-article__stat-value">
+                {commentCount}
+              </strong>
+              <p className="blog-article__stat-note">
+                {commentCount > 0
+                  ? "Perspectives already logged by the community."
+                  : "Be the first to leave a trace in the lab notes."}
+              </p>
+            </div>
+          </div>
+
+          {tableOfContents.length > 0 ? (
+            <nav className="blog-article__toc" aria-label="Table of contents">
+              <span className="blog-article__toc-label">Key sections</span>
+              <ul className="blog-article__toc-list">
+                {tableOfContents.map((heading, index) => (
+                  <li
+                    key={`${heading.anchor}-${index}`}
+                    className={`blog-article__toc-item${
+                      heading.level === 3 ? " blog-article__toc-item--sub" : ""
+                    }`}
+                  >
+                    <a
+                      href={`#${heading.anchor}`}
+                      className="blog-article__toc-link"
+                    >
+                      {heading.title}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          ) : null}
+        </section>
+
         {hasContent ? (
           <section className="blog-article__body">
             <div
@@ -280,6 +399,44 @@ async function BlogPostPage({ params }: BlogPostPageProps) {
         ) : (
           <p className="blog-article__empty">This post has no content yet.</p>
         )}
+
+        {relatedPosts.length > 0 ? (
+          <section className="blog-related">
+            <div className="blog-related__header">
+              <span className="blog-related__label">
+                More monochrome essays
+              </span>
+              <p className="blog-related__subtitle">
+                Continue the thread with recent experiments from the studio.
+              </p>
+            </div>
+            <div className="blog-related__grid">
+              {relatedPosts.map((entry, index) => {
+                if (!entry.slug) {
+                  return null;
+                }
+
+                return (
+                  <Link
+                    key={entry.id}
+                    href={`/blog/${encodeURIComponent(entry.slug)}`}
+                    className="blog-related__card"
+                    style={{ animationDelay: `${(index + 1) * 80}ms` }}
+                  >
+                    <span className="blog-related__date">
+                      {formatDate(entry.created_at)}
+                    </span>
+                    <h3 className="blog-related__title">{entry.title}</h3>
+                    <p className="blog-related__excerpt">
+                      {entry.excerpt ?? "Dive into the full story."}
+                    </p>
+                    <span className="blog-related__cta">Read next →</span>
+                  </Link>
+                );
+              })}
+            </div>
+          </section>
+        ) : null}
 
         <section className="blog-article__comments">
           <CommentSection slug={post.slug} initialCount={commentCount} />

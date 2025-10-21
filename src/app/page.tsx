@@ -103,6 +103,78 @@ const coreTools = [
 
 const exploringNow = ["Realtime AI", "Edge functions", "Vision transformers"];
 
+const liveMetrics = [
+  {
+    value: "12",
+    suffix: "+",
+    label: "Motion prototypes",
+    description: "High-fidelity animation handoffs delivered in the past year.",
+  },
+  {
+    value: "48",
+    suffix: "ms",
+    label: "Interaction latency",
+    description: "Targeted response time across production experiences.",
+  },
+  {
+    value: "3",
+    suffix: "x",
+    label: "Faster launches",
+    description: "Acceleration founders see after integrating my workflows.",
+  },
+  {
+    value: "98",
+    suffix: "%",
+    label: "Lighthouse score",
+    description: "Performance, accessibility, and SEO kept in balance.",
+  },
+];
+
+const processSteps = [
+  {
+    title: "Discover & Align",
+    description:
+      "We map the opportunity space fast with workshops, heuristics, and motion sketches to agree on north stars.",
+    artifacts: ["Journey maps", "Motion studies"],
+  },
+  {
+    title: "Prototype & Iterate",
+    description:
+      "Interactive prototypes and system spikes de-risk assumptions. Tooling ranges from GSAP to Compose previews.",
+    artifacts: ["GSAP timelines", "Composable kits"],
+  },
+  {
+    title: "Ship & Measure",
+    description:
+      "CI/CD, observability, and product analytics ensure every release is measurable and reversible when needed.",
+    artifacts: ["Release playbooks", "Telemetry dashboards"],
+  },
+];
+
+const labShowcase = [
+  {
+    title: "Generative color orchestrator",
+    description:
+      "Turns brand palettes into motion-ready token sets with automated contrast checks and live preview.",
+    link: "https://github.com/dawaman43",
+    status: "Prototype",
+  },
+  {
+    title: "Edge-rendered markdown theatre",
+    description:
+      "Streams MDX to cinematic layouts with WASM typography shaping and animated annotations.",
+    link: "https://github.com/dawaman43",
+    status: "In progress",
+  },
+  {
+    title: "Compose motion lab",
+    description:
+      "Compose multiplatform playground showcasing spring-driven micro interactions synced with web Framer exports.",
+    link: "https://github.com/dawaman43",
+    status: "Playground",
+  },
+];
+
 const heroFacts = [
   {
     label: "Based in",
@@ -124,119 +196,94 @@ const heroBadges: {
   delayClass: string;
 }[] = [
   {
-    label: "Currently shipping: Gebeya Go",
-    style: { top: "-2.5rem", left: "-2.5rem" },
+    label: "Monochrome motion specialist",
+    style: { top: "-1.8rem", left: "-1.4rem" },
     delayClass: "float-delay-1",
   },
   {
-    label: "4th year Software Engineering student",
-    style: { bottom: "-2.6rem", left: "-0.5rem" },
+    label: "4th year Software Engineering @ ASTU",
+    style: { bottom: "-2rem", left: "1rem" },
     delayClass: "float-delay-2",
   },
   {
-    label: "Open to remote roles",
-    style: { top: "38%", right: "-2.6rem" },
+    label: "Open to remote collaborations",
+    style: { top: "42%", right: "-2.4rem" },
     delayClass: "float-delay-3",
   },
 ];
 
 function Home() {
+  const marqueeTools = [...coreTools, ...coreTools];
+
   return (
-    <main className="px-4 md:px-6 space-y-16 md:space-y-20">
+    <main className="bw-main px-4 md:px-6 space-y-16 md:space-y-20">
       <IntroOverlay />
       <ScrollRail />
       <HomeMotion />
       {/* Hero */}
-      <section className="relative max-w-6xl mx-auto pt-16 md:pt-28 pb-16 md:pb-24">
-        <div
-          className="hero-aurora hero-aurora--violet -left-28 -top-28"
-          aria-hidden
-        />
-        <div
-          className="hero-aurora hero-aurora--pink -right-12 bottom-0"
-          aria-hidden
-        />
-        <div className="relative grid grid-cols-1 md:grid-cols-[1.1fr_0.9fr] items-center gap-8 md:gap-12">
-          {/* Text */}
-          <div className="text-center md:text-left overflow-visible">
-            <div
-              className="inline-flex items-center px-4 py-1.5 rounded-full border border-white/15 bg-white/5 backdrop-blur-md"
-              data-hero-item
-            >
-              <span className="text-xs text-white/75">
-                Full‑Stack • Android • AI/ML
-              </span>
+      <section className="bw-hero relative max-w-6xl mx-auto pt-16 md:pt-28 pb-16 md:pb-24">
+        <div className="bw-hero-bg" aria-hidden>
+          <span className="bw-hero-grid" />
+          <span className="bw-hero-stripe bw-hero-stripe--one" />
+          <span className="bw-hero-stripe bw-hero-stripe--two" />
+          <span className="bw-hero-ring" />
+          <span className="bw-hero-noise" />
+        </div>
+        <div className="relative z-10 grid grid-cols-1 items-center gap-10 md:grid-cols-[1.05fr_0.95fr] md:gap-12">
+          <div className="space-y-6 md:space-y-8">
+            <div className="bw-pill" data-hero-item>
+              <span>Full-stack</span>
+              <span>Android</span>
+              <span>AI/ML</span>
             </div>
-            <h1
-              className="mt-6 text-4xl md:text-6xl font-extrabold tracking-tight"
-              data-hero-item
-            >
-              Dawit Worku
+            <h1 className="bw-hero-title" data-hero-item>
+              <span className="bw-hero-outline">Dawit Worku</span> crafts
+              monochrome-first products with
+              <span className="bw-hero-highlight">motion-led precision.</span>
             </h1>
-            {/* Role ticker */}
-            <div
-              className="mt-2 h-6 md:h-7 relative overflow-hidden"
-              data-hero-item
-            >
-              <div className="absolute inset-0 [mask-image:linear-gradient(black,black)] animate-[ticker_9s_ease-in-out_infinite] will-change-transform">
-                <div className="flex flex-col gap-0 text-sm md:text-base text-white/80">
-                  <span>Full‑Stack Developer</span>
-                  <span>Android Engineer</span>
-                  <span>AI/ML Enthusiast</span>
-                </div>
-              </div>
-            </div>
-            <p
-              className="mt-4 md:mt-6 text-base md:text-lg text-white/80 leading-relaxed max-w-2xl mx-auto md:mx-0"
-              data-hero-item
-            >
-              I design and build across web, Android, and AI/ML—shipping
-              polished UIs, reliable APIs, and intelligent features with
-              measurable impact.
+            <p className="bw-hero-subtitle" data-hero-item>
+              I deliver intentionally minimal interfaces that move—shipping fast
+              web experiences, Android apps, and AI-infused workflows for teams
+              that care about polish, accessibility, and measurable impact.
             </p>
-            <div
-              className="mt-8 flex items-center justify-center md:justify-start gap-3 md:gap-4"
-              data-hero-item
-            >
+            <div className="bw-hero-links" data-hero-item>
               <Button asChild>
                 <Link href="/projects">View Projects</Link>
               </Button>
               <Button asChild variant="outline">
                 <Link href="mailto:dawitworkujima@gmail.com">
-                  Let&#39;s talk
+                  Let&apos;s talk
                 </Link>
               </Button>
             </div>
-            {/* Stats + Social */}
-            <div
-              className="mt-6 md:mt-8 flex flex-col md:flex-row items-center md:items-start gap-4 md:gap-6"
-              data-hero-item
-            >
-              <div className="flex flex-wrap justify-center md:justify-start gap-x-6 gap-y-3 text-white/80 text-sm md:text-base">
-                <div>
-                  <span className="text-white font-bold">5+</span> yrs exp
+            <div className="bw-hero-meta" data-hero-item>
+              <div className="bw-hero-stats">
+                <div className="bw-hero-stat">
+                  <span className="bw-hero-stat__number">5+</span>
+                  <span className="bw-hero-stat__label">yrs exp</span>
                 </div>
-                <div>
-                  <span className="text-white font-bold">20+</span> projects
+                <div className="bw-hero-stat">
+                  <span className="bw-hero-stat__number">20+</span>
+                  <span className="bw-hero-stat__label">projects</span>
                 </div>
-                <div>
-                  <span className="text-white font-bold">4</span> domains
+                <div className="bw-hero-stat">
+                  <span className="bw-hero-stat__number">4</span>
+                  <span className="bw-hero-stat__label">domains</span>
                 </div>
               </div>
-              <div className="flex items-center gap-3 opacity-90">
+              <div className="bw-hero-social">
                 <a
                   aria-label="GitHub"
                   href="https://github.com/dawaman43"
                   target="_blank"
                   rel="noreferrer"
-                  className="hover:opacity-100"
+                  className="bw-hero-social__link"
                 >
                   <svg
                     width="22"
                     height="22"
                     viewBox="0 0 24 24"
                     fill="currentColor"
-                    className="opacity-80"
                   >
                     <path d="M12 .5a12 12 0 0 0-3.79 23.4c.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.55-1.4-1.35-1.77-1.35-1.77-1.1-.75.09-.74.09-.74 1.22.09 1.86 1.25 1.86 1.25 1.08 1.86 2.84 1.32 3.53 1.01.11-.78.42-1.32.77-1.63-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.17 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.65.24 2.87.12 3.17.77.84 1.24 1.91 1.24 3.22 0 4.61-2.8 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.82.58A12 12 0 0 0 12 .5Z" />
                   </svg>
@@ -246,14 +293,13 @@ function Home() {
                   href="https://linkedin.com/in/dawit-worku"
                   target="_blank"
                   rel="noreferrer"
-                  className="hover:opacity-100"
+                  className="bw-hero-social__link"
                 >
                   <svg
                     width="22"
                     height="22"
                     viewBox="0 0 24 24"
                     fill="currentColor"
-                    className="opacity-80"
                   >
                     <path d="M20.45 20.45h-3.55v-5.4c0-1.29-.02-2.95-1.8-2.95-1.8 0-2.08 1.4-2.08 2.86v5.49H9.47V9h3.41v1.56h.05c.47-.89 1.6-1.82 3.3-1.82 3.53 0 4.18 2.32 4.18 5.33v6.38ZM5.34 7.42a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.13 20.45H3.55V9h3.58v11.45Z" />
                   </svg>
@@ -263,106 +309,172 @@ function Home() {
                   href="https://x.com/dawit_codes"
                   target="_blank"
                   rel="noreferrer"
-                  className="hover:opacity-100"
+                  className="bw-hero-social__link"
                 >
                   <svg
                     width="22"
                     height="22"
                     viewBox="0 0 24 24"
                     fill="currentColor"
-                    className="opacity-80"
                   >
                     <path d="M18.244 2H21l-6.452 7.38L22 22h-6.828l-4.64-6.07L5.12 22H2.36l6.903-7.907L2 2h6.984l4.2 5.59L18.244 2Zm-1.195 18h1.987L7.03 4h-2L17.05 20Z" />
                   </svg>
                 </a>
               </div>
             </div>
-
-            <div
-              className="mt-8 glass-panel px-5 py-4 md:px-6 md:py-5 text-left"
-              data-hero-item
-            >
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                {heroFacts.map((fact) => (
-                  <div
-                    key={fact.label}
-                    className="space-y-1 text-sm md:text-base"
-                  >
-                    <p className="text-xs uppercase tracking-[0.3em] text-white/60">
-                      {fact.label}
-                    </p>
-                    <p className="text-white/80">{fact.value}</p>
-                  </div>
-                ))}
-              </div>
+            <div className="bw-hero-facts" data-hero-item>
+              {heroFacts.map((fact) => (
+                <div key={fact.label} className="bw-hero-fact">
+                  <p className="bw-hero-fact__label">{fact.label}</p>
+                  <p className="bw-hero-fact__value">{fact.value}</p>
+                </div>
+              ))}
             </div>
           </div>
-
-          {/* Photo */}
-          <div
-            className="flex justify-center md:justify-end overflow-visible"
-            data-hero-media
-          >
-            <div className="relative w-48 h-48 md:w-64 md:h-64 lg:w-72 lg:h-72 rounded-3xl overflow-hidden glass-panel float-slow">
+          <div className="bw-portrait-wrapper" data-hero-media>
+            <div className="bw-portrait">
               <Image
                 src="/profile.jpg"
                 alt="Portrait of Dawit Worku"
                 fill
                 priority
-                sizes="(max-width: 768px) 12rem, (max-width: 1024px) 16rem, 18rem"
-                className="object-cover"
+                sizes="(max-width: 768px) 16rem, (max-width: 1024px) 20rem, 24rem"
+                className="bw-portrait__image"
               />
-              <div
-                className="pointer-events-none absolute inset-0 rounded-3xl"
-                style={{
-                  background:
-                    "linear-gradient(180deg, rgba(255,255,255,0.18), rgba(255,255,255,0) 35%)",
-                  mixBlendMode: "soft-light",
-                }}
-              />
-              {heroBadges.map((badge) => (
-                <span
-                  key={badge.label}
-                  className={`hero-badge hidden md:inline-flex float-slow ${badge.delayClass}`}
-                  style={badge.style}
-                  data-hero-badge
-                >
-                  {badge.label}
-                </span>
-              ))}
+              <span className="bw-portrait__glare" aria-hidden />
+              <span className="bw-portrait__border" aria-hidden />
             </div>
+            <span
+              className="bw-portrait-orbit bw-portrait-orbit--outer"
+              aria-hidden
+            />
+            <span
+              className="bw-portrait-orbit bw-portrait-orbit--inner"
+              aria-hidden
+            />
+            <span className="bw-portrait-orbit__node" aria-hidden />
+            <span className="bw-portrait-shadow" aria-hidden />
+            {heroBadges.map((badge) => (
+              <span
+                key={badge.label}
+                className={`hero-badge hidden md:inline-flex float-slow ${badge.delayClass}`}
+                style={badge.style}
+                data-hero-badge
+              >
+                {badge.label}
+              </span>
+            ))}
           </div>
+        </div>
+      </section>
+
+      <section
+        className="bw-marquee-shell max-w-6xl mx-auto"
+        data-section-reveal
+      >
+        <div className="bw-marquee" data-reveal-child>
+          <div className="bw-marquee__inner" aria-hidden>
+            {marqueeTools.map((tool, index) => (
+              <span key={`${tool}-${index}`} className="bw-marquee__item">
+                {tool}
+              </span>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="bw-metrics max-w-6xl mx-auto" data-section-reveal>
+        <div className="bw-section-heading" data-reveal-child>
+          <div>
+            <p className="bw-section-label">Pulse</p>
+            <h2 className="bw-heading">Operational snapshot</h2>
+          </div>
+          <span className="bw-section-caption">
+            Tracking velocity • Clarity • Motion
+          </span>
+        </div>
+        <div className="bw-metrics__grid">
+          {liveMetrics.map((metric) => (
+            <div key={metric.label} className="bw-metric" data-reveal-child>
+              <span className="bw-metric__glow" aria-hidden />
+              <div className="bw-metric__value">
+                {metric.value}
+                <span>{metric.suffix}</span>
+              </div>
+              <p className="bw-metric__label">{metric.label}</p>
+              <p className="bw-metric__description">{metric.description}</p>
+            </div>
+          ))}
         </div>
       </section>
 
       {/* Focus */}
       <section className="max-w-6xl mx-auto pb-16 md:pb-20" data-section-reveal>
-        <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between mb-6">
-          <h2 className="text-2xl md:text-3xl font-extrabold">
-            What I focus on
-          </h2>
-          <span className="text-xs uppercase tracking-[0.3em] text-white/60 md:text-right">
+        <div className="bw-section-heading" data-reveal-child>
+          <div>
+            <p className="bw-section-label">Focus</p>
+            <h2 className="bw-heading">What I focus on</h2>
+          </div>
+          <span className="bw-section-caption">
             Craft • Reliability • Learning
           </span>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 md:gap-6">
           {focusHighlights.map((item) => (
-            <Card key={item.title} data-reveal-child>
-              <CardHeader>
-                <CardTitle>{item.title}</CardTitle>
-                <CardDescription>{item.description}</CardDescription>
+            <Card key={item.title} className="bw-card" data-reveal-child>
+              <CardHeader className="space-y-4">
+                <CardTitle className="bw-card__title">{item.title}</CardTitle>
+                <CardDescription className="bw-card__description">
+                  {item.description}
+                </CardDescription>
               </CardHeader>
-              <CardContent>
-                <ul className="mt-1 space-y-2 text-sm text-white/70">
+              <CardContent className="bw-card__content">
+                <ul className="bw-list">
                   {item.bullets.map((point) => (
-                    <li key={point} className="flex items-center gap-2">
-                      <span className="inline-block h-1.5 w-1.5 rounded-full bg-white/60" />
-                      {point}
+                    <li key={point} className="bw-list__item">
+                      <span className="bw-list__dot" />
+                      <span>{point}</span>
                     </li>
                   ))}
                 </ul>
               </CardContent>
             </Card>
+          ))}
+        </div>
+      </section>
+
+      <section
+        className="bw-process max-w-6xl mx-auto pb-16 md:pb-20"
+        data-section-reveal
+      >
+        <div className="bw-section-heading" data-reveal-child>
+          <div>
+            <p className="bw-section-label">Approach</p>
+            <h2 className="bw-heading">How collaborations move</h2>
+          </div>
+          <span className="bw-section-caption">
+            Strategy • Motion • Measurement
+          </span>
+        </div>
+        <div className="bw-process__inner">
+          <div className="bw-process__line" aria-hidden />
+          {processSteps.map((step, index) => (
+            <article
+              key={step.title}
+              className="bw-process__step"
+              data-reveal-child
+            >
+              <div className="bw-process__index">0{index + 1}</div>
+              <div className="bw-process__body">
+                <h3 className="bw-process__title">{step.title}</h3>
+                <p className="bw-process__description">{step.description}</p>
+                <ul className="bw-process__artifacts">
+                  {step.artifacts.map((artifact) => (
+                    <li key={artifact}>{artifact}</li>
+                  ))}
+                </ul>
+              </div>
+            </article>
           ))}
         </div>
       </section>
@@ -373,48 +485,77 @@ function Home() {
         className="max-w-6xl mx-auto pb-16 md:pb-20"
         data-section-reveal
       >
-        <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between mb-6">
-          <h2 className="text-2xl md:text-3xl font-extrabold">Featured work</h2>
-          <Link
-            href="/projects"
-            className="text-white/75 hover:text-white transition"
-          >
+        <div
+          className="bw-section-heading bw-section-heading--row"
+          data-reveal-child
+        >
+          <h2 className="bw-heading">Featured work</h2>
+          <Link href="/projects" className="bw-ghost-link">
             View all →
           </Link>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 md:gap-6">
           {featuredProjects.map((project) => (
-            <TiltCard
-              key={project.title}
-              className="glass-panel p-6 flex flex-col justify-between will-change-transform"
-              data-reveal-child
-            >
-              <div>
-                <h3 className="text-xl font-semibold text-white">
-                  {project.title}
-                </h3>
-                <p className="mt-3 text-sm md:text-base text-white/75 leading-relaxed">
-                  {project.summary}
-                </p>
+            <TiltCard key={project.title} className="bw-tilt" data-reveal-child>
+              <div className="bw-tilt__body">
+                <h3 className="bw-tilt__title">{project.title}</h3>
+                <p className="bw-tilt__summary">{project.summary}</p>
               </div>
-              <div className="mt-5 flex flex-wrap gap-2 text-xs text-white/70">
+              <div className="bw-tilt__tags">
                 {project.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="rounded-full border border-white/20 px-3 py-1 bg-white/5"
-                  >
+                  <span key={tag} className="bw-tilt__tag">
                     {tag}
                   </span>
                 ))}
               </div>
               <Link
                 href={project.href}
-                className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-white/80 hover:text-white transition"
+                className="bw-ghost-link bw-ghost-link--accent"
               >
                 Case study
                 <span aria-hidden>→</span>
               </Link>
             </TiltCard>
+          ))}
+        </div>
+      </section>
+
+      <section
+        className="bw-lab max-w-6xl mx-auto pb-16 md:pb-20"
+        data-section-reveal
+      >
+        <div
+          className="bw-section-heading bw-section-heading--row"
+          data-reveal-child
+        >
+          <div>
+            <p className="bw-section-label">Lab</p>
+            <h2 className="bw-heading">Latest experiments</h2>
+          </div>
+          <span className="bw-section-caption">
+            Prototypes • Tooling • Play
+          </span>
+        </div>
+        <div className="bw-lab__grid">
+          {labShowcase.map((item) => (
+            <article
+              key={item.title}
+              className="bw-lab__item"
+              data-reveal-child
+            >
+              <span className="bw-lab__badge">{item.status}</span>
+              <h3 className="bw-lab__title">{item.title}</h3>
+              <p className="bw-lab__description">{item.description}</p>
+              <a
+                href={item.link}
+                target="_blank"
+                rel="noreferrer"
+                className="bw-ghost-link bw-ghost-link--accent"
+              >
+                View repo
+                <span aria-hidden>{"->"}</span>
+              </a>
+            </article>
           ))}
         </div>
       </section>
@@ -425,36 +566,27 @@ function Home() {
         className="max-w-6xl mx-auto pb-16 md:pb-20"
         data-section-reveal
       >
-        <h2 className="text-2xl md:text-3xl font-extrabold mb-6">
-          Experience & Impact
+        <h2 className="bw-heading mb-6" data-reveal-child>
+          Experience &amp; Impact
         </h2>
-        <div className="space-y-6 border-l border-white/15 pl-6">
+        <div className="bw-timeline">
           {experienceTimeline.map((item) => (
             <article
               key={`${item.role}-${item.company}`}
-              className="relative"
+              className="bw-timeline__item"
               data-reveal-child
             >
-              <span className="absolute -left-8 top-1.5 h-3 w-3 rounded-full bg-white" />
-              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+              <span className="bw-timeline__dot" aria-hidden />
+              <div className="bw-timeline__top">
                 <div>
-                  <h3 className="text-lg md:text-xl font-semibold text-white">
-                    {item.role}
-                  </h3>
-                  <p className="text-sm md:text-base text-white/70">
-                    {item.company}
-                  </p>
+                  <h3 className="bw-timeline__role">{item.role}</h3>
+                  <p className="bw-timeline__company">{item.company}</p>
                 </div>
-                <span className="text-xs uppercase tracking-widest text-white/60">
-                  {item.period}
-                </span>
+                <span className="bw-timeline__period">{item.period}</span>
               </div>
-              <ul className="mt-3 space-y-2 text-sm text-white/70 leading-relaxed">
+              <ul className="bw-timeline__list">
                 {item.details.map((detail) => (
-                  <li key={detail} className="flex gap-2">
-                    <span className="mt-2 h-1 w-4 rounded-sm bg-white/40" />
-                    <span>{detail}</span>
-                  </li>
+                  <li key={detail}>{detail}</li>
                 ))}
               </ul>
             </article>
@@ -464,37 +596,32 @@ function Home() {
 
       {/* Tools & Learning */}
       <section className="max-w-6xl mx-auto pb-16 md:pb-20" data-section-reveal>
-        <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_0.8fr] gap-6 md:gap-8">
-          <div className="glass-panel p-6" data-reveal-child>
-            <h2 className="text-xl md:text-2xl font-semibold">Daily toolkit</h2>
-            <p className="mt-2 text-sm md:text-base text-white/75">
-              Technologies I use every day to keep products shipping quickly and
-              safely.
+        <div className="grid grid-cols-1 gap-6 md:gap-8 lg:grid-cols-[1.2fr_0.8fr]">
+          <div className="bw-panel" data-reveal-child>
+            <h2 className="bw-panel__title">Daily toolkit</h2>
+            <p className="bw-panel__subtitle">
+              Technologies I lean on every day to keep products shipping quickly
+              and safely.
             </p>
-            <ul className="mt-4 flex flex-wrap gap-2 text-sm text-white/80">
+            <ul className="bw-chip-row">
               {coreTools.map((tool) => (
-                <li
-                  key={tool}
-                  className="rounded-full border border-white/15 bg-white/5 px-3 py-1"
-                >
+                <li key={tool} className="bw-chip-row__item">
                   {tool}
                 </li>
               ))}
             </ul>
           </div>
 
-          <div className="glass-panel p-6" data-reveal-child>
-            <h2 className="text-xl md:text-2xl font-semibold">
-              Currently exploring
-            </h2>
-            <p className="mt-2 text-sm md:text-base text-white/75">
-              Always experimenting with what’s next in product engineering and
-              AI.
+          <div className="bw-panel" data-reveal-child>
+            <h2 className="bw-panel__title">Currently exploring</h2>
+            <p className="bw-panel__subtitle">
+              Always experimenting with what&apos;s next in product engineering
+              and AI.
             </p>
-            <ul className="mt-4 space-y-3 text-sm text-white/80">
+            <ul className="bw-stack-list">
               {exploringNow.map((topic) => (
-                <li key={topic} className="flex items-center gap-3">
-                  <span className="inline-flex h-2 w-2 rounded-full bg-white/70" />
+                <li key={topic} className="bw-stack-list__item">
+                  <span className="bw-stack-list__dot" />
                   {topic}
                 </li>
               ))}
@@ -509,22 +636,19 @@ function Home() {
         className="max-w-5xl mx-auto pb-20"
         data-section-reveal
       >
-        <div
-          className="glass-panel p-6 md:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-4"
-          data-reveal-child
-        >
+        <div className="bw-contact" data-reveal-child>
           <div>
-            <h2 className="text-xl md:text-2xl font-extrabold">
-              Let’s build what’s next
+            <h2 className="bw-contact__title">
+              Let&apos;s build what&apos;s next
             </h2>
-            <p className="mt-2 text-sm md:text-base text-white/75">
+            <p className="bw-contact__subtitle">
               Open to collaborations, advisory roles, and full-time
-              opportunities where craft and impact matter.
+              opportunities where craft and motion matter.
             </p>
           </div>
           <Link
-            href="mailto:your@email"
-            className="rounded-full px-5 md:px-6 py-2.5 md:py-3 bg-white text-black font-semibold shadow hover:bg-white/90 transition"
+            href="mailto:dawitworkujima@gmail.com"
+            className="bw-contact__cta"
           >
             Email me
           </Link>

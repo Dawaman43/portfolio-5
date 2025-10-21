@@ -99,7 +99,7 @@ export default function RootLayout({
 
   return (
     <html lang="en" data-scroll-behavior="smooth">
-      <body className={`${bodyFontClass} antialiased`}>
+      <body className={`bw-theme ${bodyFontClass} antialiased`}>
         <SiteChrome />
         {children}
         <script
