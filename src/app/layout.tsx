@@ -68,6 +68,9 @@ export const metadata: Metadata = {
     apple: "/profile.jpg",
     shortcut: "/favicon.ico",
   },
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+  },
 };
 
 export default function RootLayout({
