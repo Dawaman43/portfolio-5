@@ -27,9 +27,10 @@ export function middleware(request: NextRequest) {
   }
 
   if (ADMIN_HOSTS.has(host)) {
-    const url = request.nextUrl.clone();
-    if (!url.pathname.startsWith("/admin")) {
-      url.pathname = `/admin${url.pathname === "/" ? "" : url.pathname}`;
+    // Allow API routes to remain at /api when served from the admin subdomain
+    if (!pathname.startsWith("/admin") && !pathname.startsWith("/api")) {
+      const url = request.nextUrl.clone();
+      url.pathname = `/admin${pathname === "/" ? "" : pathname}`;
       return NextResponse.rewrite(url);
     }
   }
