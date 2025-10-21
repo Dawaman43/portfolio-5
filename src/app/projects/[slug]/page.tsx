@@ -12,9 +12,10 @@ export function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  const project = getCaseStudy(params.slug);
+  const { slug } = await params;
+  const project = getCaseStudy(slug);
   if (!project) {
     return {
       title: "Project not found",
@@ -37,12 +38,13 @@ export async function generateMetadata({
   };
 }
 
-type CaseStudyPageProps = {
-  params: { slug: string };
-};
-
-export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
-  const project = getCaseStudy(params.slug);
+export default async function CaseStudyPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const project = getCaseStudy(slug);
 
   if (!project) notFound();
 

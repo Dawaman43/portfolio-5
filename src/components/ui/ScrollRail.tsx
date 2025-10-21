@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import Image from "next/image";
 
 type SectionInfo = {
   id: string;
@@ -22,7 +23,7 @@ export default function ScrollRail() {
   const [hoverPct, setHoverPct] = useState<number | null>(null);
   const [dragging, setDragging] = useState(false);
   const [focused, setFocused] = useState(false);
-  const [preview, setPreview] = useState<{
+  const [preview] = useState<{
     text: string;
     imageSrc?: string;
   } | null>(null);
@@ -263,12 +264,15 @@ export default function ScrollRail() {
             aria-label={`Preview of ${hoverSection.section.title}`}
           >
             {preview?.imageSrc && (
-              <div className="scroll-rail__modal-media">
-                <img
+              <div className="scroll-rail__modal-media relative">
+                <Image
                   src={preview.imageSrc}
                   alt=""
-                  className="scroll-rail__modal-image"
-                  loading="lazy"
+                  fill
+                  sizes="(max-width: 768px) 160px, 240px"
+                  className="scroll-rail__modal-image object-cover"
+                  priority={false}
+                  unoptimized
                 />
               </div>
             )}

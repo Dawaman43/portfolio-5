@@ -60,14 +60,11 @@ function getParam(sp: SearchParams, key: string): string | undefined {
 }
 
 type BlogPageProps = {
-  searchParams: Promise<SearchParams> | SearchParams;
+  searchParams?: Promise<SearchParams>;
 };
 
 async function BlogPage({ searchParams }: BlogPageProps) {
-  const resolvedSearchParams =
-    searchParams instanceof Promise
-      ? await searchParams
-      : (searchParams as SearchParams);
+  const resolvedSearchParams: SearchParams = (await searchParams) ?? {};
 
   const q = (getParam(resolvedSearchParams, "q") || "").trim();
   const sort = (getParam(resolvedSearchParams, "sort") || "new").toLowerCase();
