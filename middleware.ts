@@ -1,15 +1,22 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
-const ADMIN_HOSTS = new Set(["admin.dawitworku.tech", "admin.daiwtworku.tech"]);
-
 export function middleware(request: NextRequest) {
   const rawHost =
-    request.headers.get("x-forwarded-host") ?? request.headers.get("host");
-  const host = rawHost?.split(",")[0]?.trim().toLowerCase() ?? "";
+    request.headers.get("x-forwarded-host") ??
+    request.headers.get("host") ??
+    "";
+
+  // Normalize and extract the first host (if multiple forwarded hosts)
+  const host = rawHost.split(",")[0].trim().toLowerCase();
+
+  // Detect if it's the admin subdomain
+  const isAdminHost =
+    host === "admin.dawitworku.tech" || host.endsWith(".admin.dawitworku.tech");
+
   const { pathname } = request.nextUrl;
 
-  // Serve custom icons from profile.jpg (bypass default Next icon)
+  // --- 1. Handle custom icons (profile.jpg instead of Next icons) ---
   const iconPaths = new Set([
     "/favicon.ico",
     "/apple-touch-icon.png",
@@ -20,6 +27,7 @@ export function middleware(request: NextRequest) {
     "/android-chrome-192x192.png",
     "/android-chrome-512x512.png",
   ]);
+
   if (iconPaths.has(pathname)) {
     const url = request.nextUrl.clone();
     url.pathname = "/profile.jpg";
@@ -28,10 +36,11 @@ export function middleware(request: NextRequest) {
     return res;
   }
 
-  if (ADMIN_HOSTS.has(host)) {
-    // Allow API and Next.js internal assets/data to remain at their original paths
+  // --- 2. Handle subdomain → /admin rewrite ---
+  if (isAdminHost) {
     const isInternal =
       pathname.startsWith("/api") || pathname.startsWith("/_next");
+
     if (!pathname.startsWith("/admin") && !isInternal) {
       const url = request.nextUrl.clone();
       url.pathname = `/admin${pathname === "/" ? "" : pathname}`;
@@ -39,6 +48,17 @@ export function middleware(request: NextRequest) {
     }
   }
 
+  // --- 3. Optional Debug (safe to remove after confirming) ---
+  // if (pathname === "/debug") {
+  //   return NextResponse.json({
+  //     xForwardedHost: request.headers.get("x-forwarded-host"),
+  //     host: request.headers.get("host"),
+  //     detectedHost: host,
+  //     isAdminHost,
+  //   });
+  // }
+
+  // Default: allow through
   return NextResponse.next();
 }
 
