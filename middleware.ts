@@ -48,15 +48,14 @@ export function middleware(request: NextRequest) {
     }
   }
 
-  // --- 3. Optional Debug (safe to remove after confirming) ---
-  // if (pathname === "/debug") {
-  //   return NextResponse.json({
-  //     xForwardedHost: request.headers.get("x-forwarded-host"),
-  //     host: request.headers.get("host"),
-  //     detectedHost: host,
-  //     isAdminHost,
-  //   });
-  // }
+  if (pathname === "/debug") {
+    return NextResponse.json({
+      xForwardedHost: request.headers.get("x-forwarded-host"),
+      host: request.headers.get("host"),
+      detectedHost: host,
+      isAdminHost,
+    });
+  }
 
   // Default: allow through
   return NextResponse.next();
