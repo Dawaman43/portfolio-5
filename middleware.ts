@@ -2,21 +2,22 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
 export function middleware(request: NextRequest) {
+  const url = request.nextUrl;
+  const { pathname } = url;
+
+  // Determine the hostname robustly (Vercel sometimes hides subdomain in headers)
   const rawHost =
     request.headers.get("x-forwarded-host") ??
     request.headers.get("host") ??
-    "";
+    url.hostname;
 
-  // Normalize and extract the first host (if multiple forwarded hosts)
   const host = rawHost.split(",")[0].trim().toLowerCase();
 
-  // Detect if it's the admin subdomain
+  // Detect admin subdomain either by host or URL hostname
   const isAdminHost =
-    host === "admin.dawitworku.tech" || host.endsWith(".admin.dawitworku.tech");
+    host.includes("admin.") || url.hostname.includes("admin.");
 
-  const { pathname } = request.nextUrl;
-
-  // --- 1. Handle custom icons (profile.jpg instead of Next icons) ---
+  // --- 1. Serve custom icons from profile.jpg ---
   const iconPaths = new Set([
     "/favicon.ico",
     "/apple-touch-icon.png",
@@ -29,27 +30,29 @@ export function middleware(request: NextRequest) {
   ]);
 
   if (iconPaths.has(pathname)) {
-    const url = request.nextUrl.clone();
-    url.pathname = "/profile.jpg";
-    const res = NextResponse.rewrite(url);
+    const newUrl = url.clone();
+    newUrl.pathname = "/profile.jpg";
+    const res = NextResponse.rewrite(newUrl);
     res.headers.set("Cache-Control", "no-store");
     return res;
   }
 
-  // --- 2. Handle subdomain → /admin rewrite ---
+  // --- 2. Rewrite admin subdomain paths ---
   if (isAdminHost) {
     const isInternal =
       pathname.startsWith("/api") || pathname.startsWith("/_next");
 
     if (!pathname.startsWith("/admin") && !isInternal) {
-      const url = request.nextUrl.clone();
-      url.pathname = `/admin${pathname === "/" ? "" : pathname}`;
-      return NextResponse.rewrite(url);
+      const newUrl = url.clone();
+      newUrl.pathname = `/admin${pathname === "/" ? "" : pathname}`;
+      return NextResponse.rewrite(newUrl);
     }
   }
 
+  // --- 3. Debug endpoint ---
   if (pathname === "/debug") {
     return NextResponse.json({
+      urlHostname: url.hostname,
       xForwardedHost: request.headers.get("x-forwarded-host"),
       host: request.headers.get("host"),
       detectedHost: host,
@@ -57,7 +60,6 @@ export function middleware(request: NextRequest) {
     });
   }
 
-  // Default: allow through
   return NextResponse.next();
 }
 
