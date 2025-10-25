@@ -2,6 +2,12 @@
   "redirects": [
     {
       "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "dawitworku.tech"
+        }
+      ],
       "destination": "https://www.dawitworku.tech/$1",
       "permanent": true
     }
